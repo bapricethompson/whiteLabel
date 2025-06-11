@@ -6,7 +6,7 @@ export default function Nav() {
   const pathname = usePathname();
 
   return (
-    <nav className="sm:px-2 md:p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
+    <nav className="sm:px-2 md:p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0 text-primaryText">
       {/* Left Section */}
       <div className="w-full md:w-2/5 2xl:w-[25%] flex items-center justify-between md:justify-start">
         <a href="/" className="mr-[30px]">
@@ -37,16 +37,18 @@ export default function Nav() {
         </div>
       </div>
       <div className="mr-0">
-        <span
-          className="material-icons"
-          style={{
-            fontSize: "40px",
-            marginRight: "30px",
-            marginLeft: "15px",
-          }}
-        >
-          shopping_cart
-        </span>
+        <a href="/cart" className="mr-[30px]">
+          <span
+            className="material-icons"
+            style={{
+              fontSize: "40px",
+              marginRight: "30px",
+              marginLeft: "15px",
+            }}
+          >
+            shopping_cart
+          </span>
+        </a>
       </div>
     </nav>
   );

@@ -7,12 +7,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        accentyellow: "#FFEA9E",
-        cardYellow: "#FFF6D3",
-        darkaccentyellow: "#F5E199",
-        primaryyellow: "#FFFBE9",
-        navbrown: "#E6E2D4",
-        darkbrown: "#CCC4A9",
+        background: "#FAF9F6",
+        primaryText: "#333333",
+        accent: "#D9643B", //buttons and highlights
+        secondaryText: "#7D7D7D",
+        accentHover: "#B25530",
+        borders: "#DDD6CE",
+        pink: "#F4E7E1",
       },
     },
   },

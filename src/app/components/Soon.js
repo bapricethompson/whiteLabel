@@ -35,7 +35,7 @@ export default function ComingSoon() {
         <h1
           className={`${josefinSans.className} text-5xl md:text-7xl font-extrabold text-black tracking-tight mb-4 w-[95%] mx-auto`}
         >
-          Desert Blossom Homeschool
+          WhiteLabel
         </h1>
 
         <div className="p-6 mb-8 w-[85%] mx-auto">
