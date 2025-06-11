@@ -13,7 +13,7 @@ export default function Home() {
         <div className="flex justify-between items-center w-[80%] mx-auto py-6 ">
           <div className="w-[50%] mx-auto">
             <h1 className="text-7xl">Hand-Made with Care</h1>
-            <Button>Shop Now</Button>
+            <Button variant={"accent"}>Shop Now</Button>
           </div>
           <div className="relative w-[30%] mx-auto aspect-[3/4]">
             <Image

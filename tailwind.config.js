@@ -7,15 +7,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#FAF9F6",
-        primaryText: "#333333",
-        accent: "#D9643B", //buttons and highlights
-        secondaryText: "#7D7D7D",
-        accentHover: "#B25530",
-        borders: "#DDD6CE",
-        pink: "#F4E7E1",
+        background: "var(--background)",
+        primaryText: "var(--foreground)",
+        accent: "var(--accent)",
+        secondaryText: "var(--secondary)",
+        accentHover: "var(--accent-hover)",
+        borders: "var(--borders)",
+        pink: "var(--pink)",
       },
     },
   },
+
   plugins: [],
 };
