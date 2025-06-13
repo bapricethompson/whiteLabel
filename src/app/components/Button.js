@@ -14,7 +14,7 @@ export default function Button({
     "font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
 
   const variantClasses = {
-    accent: "bg-accent text-black hover:bg-accentHover focus:ring-accent",
+    accent: "bg-accent text-white hover:bg-accentHover focus:ring-accent",
   };
 
   const sizeClasses = {

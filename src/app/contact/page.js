@@ -22,10 +22,10 @@ export default function ContactForm() {
   };
 
   const inputClass =
-    "w-full px-4 py-3 rounded-xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200";
+    "w-full px-4 py-3 rounded border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200";
 
   return (
-    <div className="max-w-xl mx-auto p-8 bg-white shadow-lg rounded-2xl mt-12">
+    <div className="max-w-xl mx-auto p-8 bg-borders shadow-lg rounded-2xl mt-12">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">Contact Us</h2>
       {submitted ? (
         <div className="text-green-600 font-medium">
@@ -102,7 +102,7 @@ export default function ContactForm() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-blue-700 transition duration-200 shadow-md"
+            className="w-full bg-sage py-3 px-6 rounded-xl font-medium hover:bg-darksage transition duration-200 shadow-md"
           >
             Submit
           </button>

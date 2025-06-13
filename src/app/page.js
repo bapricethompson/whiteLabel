@@ -1,10 +1,7 @@
 import Image from "next/image";
-import bee from "./img/waxCandle.jpg";
-//import candle from "./img/candle.jpg";
-import serums from "./img/serums.jpg";
-import soaps from "./img/soaps.jpg";
 import team from "./img/candleMaking.jpg";
 import Button from "./components/Button";
+import Featured from "./components/Featured";
 
 export default function Home() {
   const testimonials = [
@@ -25,69 +22,91 @@ export default function Home() {
     },
   ];
   return (
-    <div className="my-12 mx-10 text-primaryText">
-      <div className="bg-background">
+    <div className="text-primaryText">
+      <div className="bg-borders">
         <div className="flex flex-wrap-reverse justify-between text-center md:text-left items-center w-[80%] mx-auto py-6 ">
-          <div className="w-[90%] md:w-[50%] mx-auto">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl my-8 md:my-0">
+          <div className="w-[90%] md:w-[40%] mx-auto">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl my-8 ">
               Hand-Made with Care
             </h1>
-            <Button variant={"accent"}>Shop Now</Button>
+            <Button href="/shop" variant={"accent"}>
+              Shop Now
+            </Button>
           </div>
           <div className="relative w-[95%] md:w-[30%] mx-auto aspect-[3/4]">
-            <Image src={team} alt="Wax Candle" fill className="object-cover" />
+            <Image
+              src={team}
+              alt="Wax Candle"
+              fill
+              className="object-cover rounded "
+              unoptimized
+            />
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap justify-between py-12 w-[80%] mx-auto">
-        <div className="w-[95%] md:w-[30%] my-4 mx-auto aspect-[3/3]">
-          <div className="relative w-full h-full">
-            <Image src={bee} alt="Wax Candle" fill className="object-cover" />
+      <Featured />
+      <div className="bg-pink">
+        <div className="flex flex-wrap justify-between items-center py-12 w-[80%] mx-auto">
+          <div className="relative w-[95%] md:w-[30%] mx-auto aspect-[3/4]">
+            <Image
+              src={team}
+              alt="Making candle"
+              fill
+              className="object-cover rounded "
+              unoptimized
+            />
           </div>
-          <h2 className="text-center mt-4 text-xl">Best-Sellers</h2>
-        </div>
-        <div className="w-[95%] md:w-[30%] my-4 mx-auto aspect-[3/3]">
-          <div className="relative w-full h-full">
-            <Image src={serums} alt="Serums" fill className="object-cover" />
+          <div className="w-[90%] text-center md:text-left mx-auto md:w-[50%]">
+            <h2 className="text-3xl md:text-5xl py-4">Our Story</h2>
+            <p className="my-6">
+              What started as a few late nights, big dreams, and a passion for
+              quality quickly grew into something bigger than we imagined. Our
+              journey began with the belief that beautiful, well-made products
+              should feel personal — not mass-produced. We wanted to create a
+              space where thoughtful design meets real intention, where every
+              item has a purpose, and every customer is treated like a friend.
+            </p>
+            <p className="my-6">
+              We’re a small but mighty team — creatives, makers, and
+              problem-solvers — who believe that the details matter. From
+              hand-packing your orders to answering your questions with care,
+              we’re involved every step of the way. We built this business from
+              the ground up, fueled by community support and a desire to bring a
+              little more meaning into the everyday.
+            </p>
+            <p className="my-6">
+              This is more than a shop. It’s a reflection of who we are and what
+              we value: simplicity, connection, and doing things the right way —
+              even when it takes longer. Thanks for being part of the story.
+            </p>
           </div>
-          <h2 className="text-center mt-4 text-xl">New Arrivals</h2>
-        </div>
-        <div className="w-[95%] md:w-[30%] my-4 mx-auto aspect-[3/3]">
-          <div className="relative w-full h-full">
-            <Image src={soaps} alt="Soaps" fill className="object-cover" />
-          </div>
-          <h2 className="text-center mt-4 text-xl">Curated Picks</h2>
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-between items-center py-12 w-[80%] mx-auto">
-        <div className="relative w-[95%] md:w-[30%] mx-auto aspect-[3/4]">
-          <Image src={team} alt="Making candle" fill className="object-cover" />
-        </div>
-        <div className="w-[90%] text-center md:text-left mx-auto md:w-[50%]">
-          <h2 className="text-3xl md:text-5xl py-4">Our Story</h2>
-          <p>generic text here</p>
-        </div>
-      </div>
       <div>
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl  text-[#333333] text-center mb-12">
+        <div className="max-w-5xl py-12 mx-auto">
+          <h2 className="text-3xl md:text-5xl  text-primaryText text-center mb-12">
             What Our Customers Say
           </h2>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-10 md:grid-cols-3 px-4 md:px-0 max-w-7xl mx-auto">
             {testimonials.map((t, index) => (
               <div
                 key={index}
-                className="bg-white border border-[#DDD6CE] rounded-lg p-6 shadow-sm"
+                className="bg-white border border-borders rounded-2xl p-8 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer flex flex-col justify-between min-h-[280px]"
               >
-                <p className="text-[#333333] text-base leading-relaxed mb-4 italic">
+                <p className="text-primaryText text-lg leading-relaxed mb-6 italic flex-grow">
                   “{t.quote}”
                 </p>
-                <p className="text-right text-sm font-medium text-[#7D7D7D]">
+                <p className="text-right text-base font-semibold text-secondaryText">
                   — {t.name}
                 </p>
               </div>
             ))}
+          </div>
+          <div className="my-12 text-center">
+            <Button href="/shop" variant={"accent"}>
+              View Items
+            </Button>
           </div>
         </div>
       </div>
