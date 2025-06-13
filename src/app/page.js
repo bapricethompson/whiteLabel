@@ -26,9 +26,13 @@ export default function Home() {
       <div className="bg-borders">
         <div className="flex flex-wrap-reverse justify-between text-center md:text-left items-center w-[80%] mx-auto py-6 ">
           <div className="w-[90%] md:w-[40%] mx-auto">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl my-8 ">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl my-4 ">
               Hand-Made with Care
             </h1>
+            <h2 className="text-base  mb-8 ">
+              Thoughtfully hand-crafted from start to finish, our products
+              embody dedication, care, and a personal touch that you can feel.
+            </h2>
             <Button href="/shop" variant={"accent"}>
               Shop Now
             </Button>

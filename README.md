@@ -1,38 +1,106 @@
-# whiteLabel
+# WhiteLabel 🛒🌿
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+WhiteLabel is a soft, earthy-themed e-commerce platform built with modern full-stack technologies. Designed with flexibility and user experience in mind, this application provides a beautiful, responsive interface for browsing and managing product listings. It's perfect for small businesses or makers looking to sell physical or digital goods online with minimal overhead and maximum control.
 
-## Getting Started
+---
 
-First, run the development server:
+## 🌱 About the Project
+
+This project was created as a scalable and customizable base for an e-commerce site. It features a mobile-first design using Tailwind CSS and emphasizes smooth UI experiences using React and Next.js for frontend rendering. On the backend, Express.js and Firebase Realtime Database handle product management and data persistence.
+
+The goal was to create a simple yet robust full-stack application that covers the essential features of any e-commerce site: listing items, filtering by category, user roles, and a streamlined administrative experience.
+
+---
+
+## 🛠️ Design & Architecture Decisions
+
+- **Next.js** was chosen for its hybrid rendering (static and server-side), which enables blazing-fast performance and SEO optimization out of the box.
+- **React** powers the UI components, making the interface modular, reusable, and easy to maintain.
+- **Tailwind CSS** was used for styling because of its utility-first approach, allowing fast prototyping with a clean, consistent design system.
+- **Express.js** handles our custom API routes and integrates cleanly with Firebase functions for secure, server-side logic.
+- **Firebase Realtime Database** provides a lightweight, fast, and scalable backend for handling dynamic data such as product listings, user accounts, and admin actions.
+
+---
+
+## 📦 Packages Added
+
+### 1. **keen-slider**
+
+- A powerful and flexible slider/carousel library for React.
+
+### 2. **react-toastify**
+
+- Used for showing toast notifications (success messages, errors, etc.) in a non-intrusive way that enhances user feedback without blocking UI flow.
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone git@github.com:bapricethompson/whiteLabel.git
+
+# Navigate into the project
+cd whiteLabel
+
+# Install dependencies
+npm install
+
+```
+
+## Running Project Locally
+
+YOU WILL NEED THE .ENV FILE
+
+### Client
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Example of Accessing Client through Browser
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+http://localhost:3000/
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Server
 
-## Learn More
+```bash
+firebase emulators:start --only functions
+```
 
-To learn more about Next.js, take a look at the following resources:
+#### Example Api Call
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+GET http://localhost:5001/whitelabelweb-c4f4d/us-central1/api/items
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploying
 
-## Deploy on Vercel
+YOU WILL NEED THE .ENV FILE
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Client
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build
+firebase deploy --only hosting
+```
+
+#### Where Live Version is Hosted
+
+```bash
+https://whitelabelweb-c4f4d.web.app/
+```
+
+### Server
+
+```bash
+firebase deploy --only functions
+```
+
+#### Example Api Call
+
+```bash
+GET https://api-53hxrufkzq-uc.a.run.app/items
+```
