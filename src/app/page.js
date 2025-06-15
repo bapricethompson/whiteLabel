@@ -3,6 +3,7 @@ import team from "./img/candleMaking.jpg";
 import Button from "./components/Button";
 import Featured from "./components/Featured";
 import GenericH1 from "./components/GenericH1";
+import GenericP from "./components/GenericP";
 
 export default function Home() {
   const testimonials = [
@@ -61,27 +62,27 @@ export default function Home() {
           </div>
           <div className="w-[90%] text-center md:text-left mx-auto md:w-[50%]">
             <h2 className="text-3xl md:text-5xl py-4">Our Story</h2>
-            <p className="my-6">
+            <GenericP>
               What started as a few late nights, big dreams, and a passion for
               quality quickly grew into something bigger than we imagined. Our
               journey began with the belief that beautiful, well-made products
               should feel personal — not mass-produced. We wanted to create a
               space where thoughtful design meets real intention, where every
               item has a purpose, and every customer is treated like a friend.
-            </p>
-            <p className="my-6">
+            </GenericP>
+            <GenericP>
               We’re a small but mighty team — creatives, makers, and
               problem-solvers — who believe that the details matter. From
               hand-packing your orders to answering your questions with care,
               we’re involved every step of the way. We built this business from
               the ground up, fueled by community support and a desire to bring a
               little more meaning into the everyday.
-            </p>
-            <p className="my-6">
+            </GenericP>
+            <GenericP>
               This is more than a shop. It’s a reflection of who we are and what
               we value: simplicity, connection, and doing things the right way —
               even when it takes longer. Thanks for being part of the story.
-            </p>
+            </GenericP>
           </div>
         </div>
       </div>
