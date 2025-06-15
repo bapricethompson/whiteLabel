@@ -23,8 +23,8 @@ export default function GettingItem() {
     loadItem();
   }, []);
   return (
-    <div className="flex justify-between items-center flex-wrap-reverse w-[80%] mx-auto py-12">
-      <div className="relative w-[50%] aspect-[4/3] mx-auto mb-6 rounded overflow-hidden">
+    <div className="flex flex-col md:flex-row justify-between items-center w-[90%] md:w-[80%] mx-auto py-8 md:py-12 gap-6 h-[80vh] ">
+      <div className="relative w-full md:w-1/2 aspect-[4/3] rounded overflow-hidden">
         <Image
           src={item.imgUrl}
           alt={item.title || "Info image"}
@@ -32,11 +32,12 @@ export default function GettingItem() {
           style={{ objectFit: "cover", borderRadius: "inherit" }}
         />
       </div>
-      <div className="w-[50%] px-12">
-        <h1 className="text-4xl sm:text-5xl">{item.title}</h1>
-        <h2 className="text-4xl sm:text-5xl">{item.price}</h2>
-        {item.sizes && <Sizes></Sizes>}
-        <p>{item.description}</p>
+
+      <div className="w-full md:w-1/2 px-4 md:px-12">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl">{item.title}</h1>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl mt-2">{item.price}</h2>
+        {item.sizes && <Sizes />}
+        <p className="mt-4">{item.description}</p>
       </div>
     </div>
   );

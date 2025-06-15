@@ -11,12 +11,12 @@ export default function SizeSelector({ onSelect }) {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2 sm:gap-3">
       {sizes.map((size) => (
         <button
           key={size}
           onClick={() => handleClick(size)}
-          className={`px-4 py-2 rounded border ${
+          className={`px-4 py-2 rounded border text-sm sm:text-base ${
             selectedSize === size
               ? "bg-black text-white"
               : "bg-white text-black hover:bg-gray-200"

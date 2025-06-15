@@ -22,11 +22,11 @@ export default function ContactForm() {
   };
 
   const inputClass =
-    "w-full px-4 py-3 rounded border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200";
+    "w-full px-4 py-3 rounded border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ";
 
   return (
-    <div className="max-w-xl mx-auto p-8 bg-borders shadow-lg rounded-2xl mt-12">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Contact Us</h2>
+    <div className="w-[80%] md:w-[60%] lg:w-[40%]  mx-auto p-8 bg-borders shadow-lg rounded-2xl my-12">
+      <h2 className="text-3xl font-bold  mb-6">Contact Us</h2>
       {submitted ? (
         <div className="text-green-600 font-medium">
           Thanks for reaching out!
@@ -34,10 +34,7 @@ export default function ContactForm() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="name" className="block text-sm font-medium  mb-1">
               Name
             </label>
             <input
@@ -51,10 +48,7 @@ export default function ContactForm() {
           </div>
 
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="email" className="block text-sm font-medium  mb-1">
               Email
             </label>
             <input
@@ -70,7 +64,7 @@ export default function ContactForm() {
           <div>
             <label
               htmlFor="subject"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium  mb-1"
             >
               Subject
             </label>
@@ -86,7 +80,7 @@ export default function ContactForm() {
           <div>
             <label
               htmlFor="message"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium  mb-1"
             >
               Message
             </label>
@@ -102,7 +96,7 @@ export default function ContactForm() {
 
           <button
             type="submit"
-            className="w-full bg-sage py-3 px-6 rounded-xl font-medium hover:bg-darksage transition duration-200 shadow-md"
+            className="w-full bg-darksage py-3 px-6 font-semibold text-white rounded-xl font-medium hover:bg-sage hover:text-black transition duration-200 shadow-md"
           >
             Submit
           </button>
