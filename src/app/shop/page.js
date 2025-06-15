@@ -1,8 +1,11 @@
 "use client";
+
 import Slider from "../components/Slider";
 import ClearButton from "../components/ClearButton";
 import FilterButton from "../components/FilterButton";
-import { FetchItems } from "../components/FetchItems";
+import ListingCard from "../components/ListingCard";
+import GenericOuterDiv from "../components/GenericOuterDiv";
+import { FetchItems } from "../modules/FetchItems";
 import { useEffect, useState } from "react";
 
 export default function Shop() {
@@ -23,7 +26,7 @@ export default function Shop() {
   }, []);
   return (
     <div>
-      <div className="w-[80%] w-auto">
+      <GenericOuterDiv>
         <div className="bg-borders py-12">
           <h1 className="text-4xl sm:text-5xl text-center md:text-6xl mb-8 ">
             Find Your Favorites
@@ -37,7 +40,23 @@ export default function Shop() {
           <ClearButton></ClearButton>
           <FilterButton></FilterButton>
         </div>
-      </div>
+        <div className="w-[80%] flex flex-wrap gap-6 justify-start mx-auto pb-12">
+          {items.map((item) => (
+            <div
+              key={item.itemId}
+              className="min-w-[300px] flex-1 max-w-[450px]"
+            >
+              <a href={`./singleItem?itemId=${item.itemId}`}>
+                <ListingCard
+                  imgUrl={item.imgUrl}
+                  infoTitle={item.title}
+                  price={item.price}
+                />
+              </a>
+            </div>
+          ))}
+        </div>
+      </GenericOuterDiv>
     </div>
   );
 }

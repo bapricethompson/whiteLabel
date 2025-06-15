@@ -2,6 +2,7 @@ import Image from "next/image";
 import team from "./img/candleMaking.jpg";
 import Button from "./components/Button";
 import Featured from "./components/Featured";
+import GenericH1 from "./components/GenericH1";
 
 export default function Home() {
   const testimonials = [
@@ -26,9 +27,7 @@ export default function Home() {
       <div className="bg-borders">
         <div className="flex flex-wrap-reverse justify-between text-center md:text-left items-center w-[80%] mx-auto py-6 ">
           <div className="w-[90%] md:w-[40%] mx-auto">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl my-4 ">
-              Hand-Made with Care
-            </h1>
+            <GenericH1>Hand-Made with Care</GenericH1>
             <h2 className="text-base  mb-8 ">
               Thoughtfully hand-crafted from start to finish, our products
               embody dedication, care, and a personal touch that you can feel.

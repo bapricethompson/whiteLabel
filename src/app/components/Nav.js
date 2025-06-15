@@ -24,7 +24,7 @@ export default function Nav() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden flex flex-col items-center bg-white border-y py-4 space-y-4">
+        <div className="md:hidden flex flex-col items-center bg-background border-y py-4 space-y-4">
           <Link
             href="/"
             onClick={() => setMenuOpen(false)}
