@@ -99,6 +99,14 @@ https://whitelabelweb-c4f4d.web.app/
 firebase deploy --only functions
 ```
 
+or do the two deploys at the same time
+
+```bash
+firebase deploy --only hosting,functions
+```
+
+firebase deploy --only hosting,functions
+
 #### Example Api Call
 
 ```bash

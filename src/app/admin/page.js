@@ -42,18 +42,21 @@ import { parseCookies } from "nookies";
 //   }
 // };
 
-import ListingCard from "../components/ListingCard";
+import AdminCard from "../components/AdminCard";
+import Button from "../components/Button";
 import GenericH1 from "../components/GenericH1";
 import { useEffect, useState } from "react";
 import { FetchItems } from "../modules/FetchItems";
 
 export default function AdminPortal() {
   const [items, setItems] = useState([]);
-  const [activeTab, setActiveTab] = useState("users");
+  const [activeTab, setActiveTab] = useState("listings");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       //await checkAuthStatus(); // Check admin status before loading events
+      setLoading(true);
 
       try {
         if (activeTab === "listings") {
@@ -62,6 +65,8 @@ export default function AdminPortal() {
         }
       } catch (error) {
         console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -114,16 +119,39 @@ export default function AdminPortal() {
         </div>
       )}
       {activeTab === "listings" && (
-        <div className="w-[90%] max-w-[1400px] py-8  grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] sm:grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] lg:grid-cols-[repeat(auto-fill,_minmax(360px,_1fr))] gap-6 mx-auto">
-          {items.map((item) => (
-            <ListingCard
-              key={item.itemId}
-              imgUrl={item.imgUrl}
-              infoTitle={item.title}
-              price={item.price}
-              className="w-[30%] mx-auto"
-            />
-          ))}
+        <div>
+          <Button
+            className="sm:ml-12 mx-auto my-4 flex items-center w-fit"
+            href="/createItem"
+          >
+            <span
+              className="material-icons"
+              style={{
+                fontSize: "40px",
+                marginRight: "10px",
+                marginLeft: "10px",
+              }}
+            >
+              add_box
+            </span>{" "}
+            Add Item
+          </Button>
+          {loading ? (
+            <div className="text-center text-xl py-12">Loading listings...</div>
+          ) : (
+            <div className="w-[90%] max-w-[1400px] py-8 grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] sm:grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] lg:grid-cols-[repeat(auto-fill,_minmax(360px,_1fr))] gap-6 mx-auto">
+              {items.map((item) => (
+                <AdminCard
+                  key={item.itemId}
+                  itemId={item.itemId}
+                  imgUrl={item.imgUrl}
+                  infoTitle={item.title}
+                  price={item.price}
+                  className="w-[30%] mx-auto"
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
       {activeTab === "orders" && (

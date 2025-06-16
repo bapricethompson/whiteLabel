@@ -16,7 +16,7 @@ export default function Nav() {
       {/* MOBILE NAV */}
       <div className="flex items-center justify-between md:hidden p-4">
         <a href="/" className="flex items-center">
-          <span className="material-icons text-4xl ml-2">travel_explore</span>
+          <span className="material-icons text-4xl ml-2">shopping_basket</span>
         </a>
         <button onClick={toggleMenu} className="mr-4">
           <span className="material-icons text-4xl">menu</span>
@@ -75,7 +75,7 @@ export default function Nav() {
                 marginLeft: "15px",
               }}
             >
-              travel_explore
+              shopping_basket
             </span>
           </a>
           <div className="space-x-6">

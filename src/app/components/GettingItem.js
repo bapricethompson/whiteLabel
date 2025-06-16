@@ -7,23 +7,48 @@ import Image from "next/image";
 export default function GettingItem() {
   const searchParams = useSearchParams();
   const itemId = searchParams.get("itemId");
-  const [item, setItems] = useState([]);
+
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true); // loading state
+  const [error, setError] = useState(null); // error state
 
   useEffect(() => {
     async function loadItem() {
+      setLoading(true);
+      setError(null);
       try {
         const data = await FetchSingleItem(itemId);
-        setItems(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching items:", error);
+        setItem(data);
+      } catch (err) {
+        setError("Failed to load item.");
+        console.error("Error fetching item:", err);
+      } finally {
+        setLoading(false);
       }
     }
 
-    loadItem();
-  }, []);
+    if (itemId) {
+      loadItem();
+    } else {
+      setLoading(false);
+      setError("No item ID provided.");
+    }
+  }, [itemId]);
+
+  if (loading) {
+    return <div className="text-center py-80">Loading item details...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-600 py-12">{error}</div>;
+  }
+
+  if (!item) {
+    return null;
+  }
+
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center w-[90%] md:w-[80%] mx-auto py-8 md:py-12 gap-6 h-[80vh] ">
+    <div className="flex flex-col md:flex-row justify-between items-center w-[90%] md:w-[80%] mx-auto py-8 md:py-12 gap-6 h-[80vh]">
       <div className="relative w-full md:w-1/2 aspect-[4/3] rounded overflow-hidden">
         <Image
           src={item.imgUrl}
