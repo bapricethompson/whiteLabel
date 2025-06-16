@@ -1,18 +1,18 @@
-import Slider from "../components/Slider";
-import ClearButton from "../components/ClearButton";
-import FilterButton from "../components/FilterButton";
-import ListingCard from "../components/ListingCard";
-import GenericH1 from "../components/GenericH1";
-import GenericOuterDiv from "../components/GenericOuterDiv";
+import Slider from "../../components/Slider";
+import ClearButton from "../../components/ClearButton";
+import FilterButton from "../../components/FilterButton";
+import ListingCard from "../../components/ListingCard";
+import GenericH1 from "../../components/GenericH1";
+import GenericOuterDiv from "../../components/GenericOuterDiv";
 
 export default async function Shop() {
   let items = [];
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items`,
-      {
-        cache: "no-store", // Dynamic data for SSR
-      }
+      `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items`
+      // {
+      //   cache: "no-store", // Dynamic data for SSR
+      // }
     );
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);

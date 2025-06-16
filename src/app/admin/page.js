@@ -42,11 +42,11 @@ import { parseCookies } from "nookies";
 //   }
 // };
 
-import AdminCard from "../components/AdminCard";
-import Button from "../components/Button";
-import GenericH1 from "../components/GenericH1";
+import AdminCard from "../../components/AdminCard";
+import Button from "../../components/Button";
+import GenericH1 from "../../components/GenericH1";
 import { useEffect, useState } from "react";
-import { FetchItems } from "../modules/FetchItems";
+import { FetchItems } from "../../modules/FetchItems";
 
 export default function AdminPortal() {
   const [items, setItems] = useState([]);

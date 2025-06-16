@@ -1,9 +1,9 @@
 import Image from "next/image";
-import team from "./img/candleMaking.jpg";
-import Button from "./components/Button";
-import Featured from "./components/Featured";
-import GenericH1 from "./components/GenericH1";
-import GenericP from "./components/GenericP";
+import team from "../img/candleMaking.jpg";
+import Button from "../components/Button";
+import Featured from "../components/Featured";
+import GenericH1 from "../components/GenericH1";
+import GenericP from "../components/GenericP";
 
 export default function Home() {
   const testimonials = [

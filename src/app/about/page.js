@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import team from "../img/candleMaking.jpg";
-import candle from "../img/candle.jpg";
-import Button from "../components/Button";
-import GenericP from "../components/GenericP";
-import SmallerH1 from "../components/SmallerH1";
+import team from "../../img/candleMaking.jpg";
+import candle from "../../img/candle.jpg";
+import Button from "../../components/Button";
+import GenericP from "../../components/GenericP";
+import SmallerH1 from "../../components/SmallerH1";
 
 export default function About() {
   return (
