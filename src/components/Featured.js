@@ -9,19 +9,19 @@ export default function Featured() {
     <div className="flex flex-wrap justify-between py-12 w-[80%] mx-auto">
       {[
         {
-          href: "/shop",
+          href: "/shop?filter=Best-Seller",
           image: bee,
           alt: "Wax Candle",
           label: "Best-Sellers",
         },
         {
-          href: "/shop",
+          href: "/shop?filter=New",
           image: serums,
           alt: "Serums",
           label: "New Arrivals",
         },
         {
-          href: "/shop",
+          href: "/shop?filter=Popular",
           image: soaps,
           alt: "Soaps",
           label: "Curated Picks",

@@ -6,10 +6,12 @@ import FilterBar from "../../components/FilterBar";
 import ListingCard from "../../components/ListingCard";
 import GenericH1 from "../../components/GenericH1";
 import GenericOuterDiv from "../../components/GenericOuterDiv";
+import { useSearchParams } from "next/navigation";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -18,21 +20,30 @@ export default function Shop() {
           `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items`,
           { cache: "no-store" }
         );
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         setAllItems(data);
-        setItems(data); // ← ADD THIS LINE
+
+        // Apply initial filter if provided
+        const filter = searchParams.get("filter");
+        if (filter) {
+          const lowerFilter = filter.toLowerCase();
+          const filtered = data.filter((item) =>
+            item.tags?.some((tag) => tag.toLowerCase() === lowerFilter)
+          );
+          setItems(filtered);
+        } else {
+          setItems(data);
+        }
       } catch (error) {
         console.error("Error fetching items:", error);
         setAllItems([]);
-        setItems([]); // ← Also handle this fallback
+        setItems([]);
       }
     };
 
     fetchItems();
-  }, []);
+  }, [searchParams]);
 
   function handleFilterChange(selectedTags) {
     if (selectedTags.length === 0) {

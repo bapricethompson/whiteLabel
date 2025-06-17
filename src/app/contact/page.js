@@ -28,7 +28,7 @@ export default function ContactForm() {
     <div className="w-[80%] md:w-[60%] lg:w-[40%]  mx-auto p-8 bg-borders shadow-lg rounded-2xl my-12">
       <h2 className="text-3xl font-bold  mb-6">Contact Us</h2>
       {submitted ? (
-        <div className="text-green-600 font-medium">
+        <div className="text-primaryText font-medium text-center h-[60vh]">
           Thanks for reaching out!
         </div>
       ) : (
