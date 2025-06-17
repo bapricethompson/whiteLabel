@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Slider from "../../components/Slider";
 import ClearButton from "../../components/ClearButton";
 import FilterButton from "../../components/FilterButton";
@@ -5,24 +8,29 @@ import ListingCard from "../../components/ListingCard";
 import GenericH1 from "../../components/GenericH1";
 import GenericOuterDiv from "../../components/GenericOuterDiv";
 
-export default async function Shop() {
-  let items = [];
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items`
-      // {
-      //   cache: "no-store", // Dynamic data for SSR
-      // }
-    );
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    items = await res.json();
-    console.log("Server-side fetched items:", items);
-  } catch (error) {
-    console.error("Error fetching items:", error);
-    items = []; // Fallback to empty array
-  }
+export default function Shop() {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items`,
+          { cache: "no-store" } // ensure fresh data
+        );
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const data = await res.json();
+        setItems(data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+        setItems([]);
+      }
+    };
+
+    fetchItems();
+  }, []); // empty dependency array = run on mount
 
   return (
     <div>

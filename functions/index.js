@@ -34,9 +34,11 @@ apiApp.use((req, res, next) => {
 });
 
 apiApp.get("/", (req, res) => {
+  logger.info("API root endpoint hit");
   res.send("API root is working");
 });
 apiApp.post("/test", (req, res) => {
+  logger.info("Test endpoint hit", { body: req.body });
   console.log("🔥 HIT /test route");
   console.log("BODY:", req.body);
   res.status(200).json({ message: "CORS is working!", body: req.body });
@@ -48,6 +50,7 @@ const nextjsDistDir = "../.next"; // Path to .next directory relative to functio
 const nextjsServer = next({
   dev: false,
   conf: { distDir: nextjsDistDir },
+  port: process.env.PORT || 8080,
 });
 const nextjsHandle = nextjsServer.getRequestHandler();
 

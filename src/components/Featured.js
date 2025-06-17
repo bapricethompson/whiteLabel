@@ -30,7 +30,7 @@ export default function Featured() {
         <Link
           key={label}
           href={href}
-          className="group w-[95%] md:w-[30%] my-4 mx-auto aspect-[3/3] block transition-transform hover:scale-105"
+          className="group w-[95%] md:w-[30%] my-4 mx-auto aspect-[3/3] block transition-transform hover:scale-105 my-8"
         >
           <div className="relative w-full h-full rounded overflow-hidden shadow-md">
             <Image

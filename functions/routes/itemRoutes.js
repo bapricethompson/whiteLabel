@@ -7,13 +7,16 @@ const admin = require("firebase-admin");
 // POST - Create item
 router.post("/", async (req, res) => {
   try {
-    const { title, price, description, imgUrl, sizes } = req.body;
+    const { title, price, description, imgUrl, sizes, tags } = req.body;
     const userId = "testers"; // Replace with req.user.uid when auth is added
 
     if (!title || !price || !description || !imgUrl) {
       return res.status(400).json({ error: "All fields are required." });
     }
 
+    if (tags && !Array.isArray(tags)) {
+      return res.status(400).json({ error: "Tags must be an array." });
+    }
     const db = admin.database();
     const itemsRef = db.ref("items");
     const itemRef = itemsRef.push(); // generates a unique key
@@ -26,6 +29,7 @@ router.post("/", async (req, res) => {
       description,
       sizes: !!sizes, // convert sizes to boolean: true if truthy, else false
       imgUrl,
+      tags: tags || [],
       createdBy: userId,
       createdAt: new Date().toISOString(),
     };
@@ -79,6 +83,10 @@ router.put("/:id", async (req, res) => {
     const itemsRef = db.ref("items");
     const { id } = req.params;
     const updates = req.body;
+
+    if (updates.tags && !Array.isArray(updates.tags)) {
+      return res.status(400).json({ error: "Tags must be an array." });
+    }
 
     const itemRef = itemsRef.child(id);
     const snapshot = await itemRef.once("value");

@@ -9,6 +9,7 @@ export default function CreateItem() {
     description: "",
     imgUrl: "",
     sizes: false,
+    tags: "",
   });
 
   const [message, setMessage] = useState("");
@@ -25,12 +26,23 @@ export default function CreateItem() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { title, price, description, imgUrl } = formData;
+    const { title, price, description, imgUrl, tags } = formData;
 
     if (!title || !price || !description || !imgUrl) {
       showMessage("All fields are required.", "error");
       return;
     }
+
+    const tagsArray = tags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag !== "");
+
+    const payload = {
+      ...formData,
+      price: parseFloat(formData.price),
+      tags: tagsArray,
+    };
 
     try {
       const res = await fetch(
@@ -38,7 +50,7 @@ export default function CreateItem() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(payload),
         }
       );
 
@@ -54,6 +66,7 @@ export default function CreateItem() {
         description: "",
         imgUrl: "",
         sizes: false,
+        tags: "",
       });
 
       showMessage("Item created successfully!", "success");
@@ -146,6 +159,20 @@ export default function CreateItem() {
           />
         </div>
 
+        <div>
+          <label htmlFor="tags" className="block text-sm font-medium mb-1">
+            Tags (comma-separated)
+          </label>
+          <input
+            type="text"
+            name="tags"
+            value={formData.tags}
+            onChange={handleChange}
+            className={inputClass}
+            placeholder="e.g. casual, summer, cotton"
+          />
+        </div>
+
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -159,7 +186,6 @@ export default function CreateItem() {
           </label>
         </div>
 
-        {/* ✅ Message Section */}
         {message && <p className={messageStyle}>{message}</p>}
 
         <button

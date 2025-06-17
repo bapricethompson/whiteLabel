@@ -12,6 +12,7 @@ export default function UpdateItem() {
     description: "",
     imgUrl: "",
     sizes: false,
+    tags: "",
   });
 
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ export default function UpdateItem() {
           description: data.description || "",
           imgUrl: data.imgUrl || "",
           sizes: !!data.sizes,
+          tags: Array.isArray(data.tags) ? data.tags.join(", ") : "",
         });
       } catch (err) {
         showMessage(err.message, "error");
@@ -63,6 +65,13 @@ export default function UpdateItem() {
       showMessage("All fields are required.", "error");
       return;
     }
+    const payload = {
+      ...formData,
+      tags: formData.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag), // removes empty strings
+    };
 
     try {
       setSubmitting(true);
@@ -72,7 +81,7 @@ export default function UpdateItem() {
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(payload),
         }
       );
 
@@ -177,6 +186,20 @@ export default function UpdateItem() {
             />
           </div>
 
+          <div>
+            <label htmlFor="tags" className="block text-sm font-medium mb-1">
+              Tags (comma-separated)
+            </label>
+            <input
+              type="text"
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
+              className={inputClass}
+              placeholder="e.g. summer, sale, cotton"
+            />
+          </div>
+
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -190,7 +213,6 @@ export default function UpdateItem() {
             </label>
           </div>
 
-          {/* ✅ Message Section */}
           {message && <p className={messageStyle}>{message}</p>}
 
           <button

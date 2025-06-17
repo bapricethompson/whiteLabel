@@ -1,8 +1,10 @@
 import { FetchSingleItem } from "../modules/FetchSingleItem";
 import Sizes from "./Sizes";
+import Button from "./Button";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import GenericP from "./GenericP";
 
 export default function GettingItem() {
   const searchParams = useSearchParams();
@@ -60,9 +62,24 @@ export default function GettingItem() {
 
       <div className="w-full md:w-1/2 px-4 md:px-12">
         <h1 className="text-3xl sm:text-4xl md:text-5xl">{item.title}</h1>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl mt-2">{item.price}</h2>
+        <h2 className="text-xl sm:text-2xl md:text-3xl mt-2">${item.price}</h2>
         {item.sizes && <Sizes />}
         <p className="mt-4">{item.description}</p>
+        <div className="text-center md:text-left">
+          <Button className="my-4">Add to Cart</Button>
+        </div>
+        <hr className="bg-steel h-[2px]"></hr>
+        <div className="flex flex-wrap gap-2 mt-2">
+          <span className="font-semibold">Tags:</span>
+          {item.tags?.map((tag, index) => (
+            <span
+              key={index}
+              className="px-4 py-1 text-sm bg-sage text-black rounded-sm"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
