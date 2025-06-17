@@ -11,7 +11,7 @@ export default function SizeSelector({ onSelect }) {
   };
 
   return (
-    <div className="flex flex-wrap gap-2 sm:gap-3">
+    <div className="flex flex-wrap gap-2 py-4 sm:gap-3">
       {sizes.map((size) => (
         <button
           key={size}

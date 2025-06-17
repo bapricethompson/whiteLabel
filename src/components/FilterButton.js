@@ -2,7 +2,7 @@ export default function FilterButton({ onClick, active }) {
   return (
     <button
       onClick={onClick}
-      className={`px-8 py-3 flex items-center rounded-[10px] font-medium transition-colors ${
+      className={`px-8 py-3 flex items-center rounded-[10px] font-medium transition-colors text-white ${
         active ? "bg-accentHover" : "bg-accent "
       }`}
     >
