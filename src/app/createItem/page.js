@@ -35,7 +35,7 @@ const checkAuthStatus = async () => {
     if (!response.ok) {
       console.log("FAIL");
       // Could not verify token or fetch user
-      //window.location.replace("/login");
+      window.location.replace("/login");
       return;
     }
 

@@ -25,6 +25,7 @@ export default function LoginForm() {
 
       console.log("Logged in!", userCred.user);
       // maybe redirect or update UI state here
+      window.location.replace("/");
     } catch (err) {
       console.error("Login error:", err);
       setError("Login failed. Check your credentials.");
