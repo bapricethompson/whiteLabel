@@ -10,6 +10,10 @@ router.post("/", async (req, res) => {
     const { title, price, description, imgUrl, sizes, tags } = req.body;
     const userId = "testers"; // Replace with req.user.uid when auth is added
 
+    console.log("title", title);
+    console.log("price", price);
+    console.log("img", imgUrl);
+    console.log("desc", description);
     if (!title || !price || !description || !imgUrl) {
       return res.status(400).json({ error: "All fields are required." });
     }

@@ -44,7 +44,6 @@ apiApp.post("/test", (req, res) => {
   res.status(200).json({ message: "CORS is working!", body: req.body });
 });
 apiApp.use("/items", itemRoutes);
-
 // Next.js SSR Setup
 const nextjsDistDir = "../.next"; // Path to .next directory relative to functions/
 const nextjsServer = next({

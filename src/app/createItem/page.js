@@ -1,6 +1,81 @@
 "use client";
-//import { storage } from "../firebase.json";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { storage } from "../firebase";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { v4 } from "uuid";
+
+function resizeImage(file, maxWidth, maxHeight) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+
+        let width = img.width;
+        let height = img.height;
+
+        // Scale proportionally
+        if (width > maxWidth || height > maxHeight) {
+          const ratio = Math.min(maxWidth / width, maxHeight / height);
+          width = width * ratio;
+          height = height * ratio;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              return reject(new Error("Canvas is empty"));
+            }
+            const resizedFile = new File([blob], file.name, {
+              type: file.type,
+              lastModified: Date.now(),
+            });
+            resolve(resizedFile);
+          },
+          file.type,
+          0.9 // quality (for JPEG/webp)
+        );
+      };
+
+      img.onerror = reject;
+      img.src = event.target.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadFile(file, folder, name) {
+  if (!file) return false;
+
+  try {
+    const resizedFile = await resizeImage(file, 700, 500); // ✅ Resize before upload
+
+    const fileRef = ref(storage, `${folder}/${name}-${v4()}`);
+    const metadata = { contentType: resizedFile.type };
+
+    const snapshot = await uploadBytes(fileRef, resizedFile, metadata);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    return downloadURL;
+  } catch (err) {
+    console.error("Image processing/upload error:", err);
+    throw err;
+  }
+}
 
 export default function CreateItem() {
   const [formData, setFormData] = useState({
@@ -10,9 +85,11 @@ export default function CreateItem() {
     sizes: false,
     tags: "",
   });
+  const [error, setError] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const fileInputRef = useRef();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -34,8 +111,24 @@ export default function CreateItem() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let imageUrl = null;
 
-    const { title, price, description, tags } = formData;
+    if (imageFile) {
+      console.log("formData", formData.title);
+      try {
+        imageUrl = await uploadFile(
+          imageFile,
+          "items",
+          "items-" + formData.title.replaceAll(" ", "_")
+        );
+      } catch (err) {
+        console.error("Image upload error:", err);
+        setError("Image upload failed");
+        return;
+      }
+    }
+
+    const { title, price, description, tags, sizes } = formData;
 
     if (!title || !price || !description || !imageFile) {
       showMessage("All fields are required, including an image.", "error");
@@ -47,23 +140,27 @@ export default function CreateItem() {
       .map((tag) => tag.trim())
       .filter((tag) => tag !== "");
 
-    const form = new FormData();
-    form.append("title", formData.title);
-    form.append("price", formData.price.toString());
-    form.append("description", formData.description);
-    form.append("sizes", formData.sizes);
-    form.append("tags", JSON.stringify(tagsArray));
-    form.append("image", imageFile);
-    for (const [key, value] of form.entries()) {
-      console.log(`${key}:`, value);
-    }
+    // Create JSON payload
+    const payload = {
+      title,
+      price: parseFloat(price), // Ensure price is a number
+      description,
+      sizes,
+      tags: tagsArray,
+      imgUrl: imageUrl,
+    };
+
+    console.log("Payload:", payload); // Debug log
 
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items`,
         {
           method: "POST",
-          body: form,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         }
       );
 
@@ -79,6 +176,9 @@ export default function CreateItem() {
         tags: "",
       });
       setImageFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null; // Reset file input
+      }
 
       showMessage("Item created successfully!", "success");
     } catch (err) {
@@ -141,17 +241,13 @@ export default function CreateItem() {
             required
           />
         </div>
-
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium mb-1">
-            Image
-          </label>
+        <div className="w-[80%] text-left">
+          <label className="block text-sm font-medium mb-1">Upload Image</label>
           <input
             type="file"
             accept="image/*"
-            onChange={handleImageChange}
-            className={inputClass}
-            required
+            onChange={(e) => setImageFile(e.target.files[0])}
+            ref={fileInputRef}
           />
         </div>
 

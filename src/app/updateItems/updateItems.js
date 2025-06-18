@@ -112,7 +112,7 @@ export default function UpdateItem() {
   };
 
   const inputClass =
-    "w-full px-4 py-3 rounded border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200";
+    "w-full px-4 py-3 rounded border border-gray-300  text-black bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200";
 
   const messageStyle =
     messageType === "success"
@@ -124,7 +124,7 @@ export default function UpdateItem() {
       <h2 className="text-3xl font-bold mb-6">Update Item</h2>
 
       {loading ? (
-        <p className="text-center text-gray-500">Loading item...</p>
+        <p className="text-center text-foreground">Loading item...</p>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>

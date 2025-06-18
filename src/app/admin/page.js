@@ -107,10 +107,10 @@ export default function AdminPortal() {
           {/* Main Content */}
           <main className="flex-grow text-center my-[40px] mx-auto">
             <div className="p-6 mb-8 w-[85%] mx-auto">
-              <h2 className={` text-3xl font-semibold text-gray-900`}>
+              <h2 className={` text-3xl font-semibold text-primaryText`}>
                 Something Awesome is Coming Soon
               </h2>
-              <p className={` mt-2 text-lg text-gray-600`}>
+              <p className={` mt-2 text-lg text-primaryText`}>
                 We’re working hard to bring you a brand new experience. Stay
                 tuned for updates!
               </p>
@@ -159,10 +159,10 @@ export default function AdminPortal() {
           {/* Main Content */}
           <main className="flex-grow text-center my-[40px] mx-auto">
             <div className="p-6 mb-8 w-[85%] mx-auto">
-              <h2 className={` text-3xl font-semibold text-gray-900`}>
+              <h2 className={` text-3xl font-semibold text-primaryText`}>
                 Something Awesome is Coming Soon
               </h2>
-              <p className={` mt-2 text-lg text-gray-600`}>
+              <p className={` mt-2 text-lg text-primaryText`}>
                 We’re working hard to bring you a brand new experience. Stay
                 tuned for updates!
               </p>

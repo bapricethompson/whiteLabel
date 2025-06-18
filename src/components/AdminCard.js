@@ -19,14 +19,14 @@ export default function AdminCard({ itemId, imgUrl, infoTitle, price }) {
     <div className="h-full flex flex-col text-left rounded-xl py-6 px-4  shadow-lg transition-all duration-300 ease-in-out ">
       <div className="mr-0 w-full flex justify-end pb-2 space-x-2">
         <Link
-          className="text-gray-600 hover:text-blue-500"
+          className="text-foreground hover:text-blue-500"
           href={`/updateItems?itemId=${itemId}`}
         >
           <span className="material-icons">edit</span>
         </Link>
         <button
           onClick={() => handleDelete(itemId)}
-          className="text-gray-600 hover:text-red-500"
+          className="text-foreground hover:text-red-500"
           title="Delete"
         >
           <span className="material-icons">delete</span>

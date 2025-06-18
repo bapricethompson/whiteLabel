@@ -28,9 +28,9 @@ The goal was to create a simple yet robust full-stack application that covers th
 
 - A powerful and flexible slider/carousel library for React.
 
-### 2. **react-toastify**
+### 2. **firebase**
 
-- Used for showing toast notifications (success messages, errors, etc.) in a non-intrusive way that enhances user feedback without blocking UI flow.
+- Google's backend-as-a-service platform used in this project for authentication, database (Realtime), storage, and hosting.
 
 ---
 

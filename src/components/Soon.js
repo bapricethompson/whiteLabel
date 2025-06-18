@@ -33,18 +33,20 @@ export default function ComingSoon() {
       <main className="flex-grow text-center my-[40px] mx-auto">
         {/* Logo/Title */}
         <h1
-          className={`${josefinSans.className} text-5xl md:text-7xl font-extrabold text-black tracking-tight mb-4 w-[95%] mx-auto`}
+          className={`${josefinSans.className} text-5xl md:text-7xl font-extrabold text-primaryText tracking-tight mb-4 w-[95%] mx-auto`}
         >
           WhiteLabel
         </h1>
 
         <div className="p-6 mb-8 w-[85%] mx-auto">
           <h2
-            className={`${josefinSans.className} text-3xl font-semibold text-gray-900`}
+            className={`${josefinSans.className} text-3xl font-semibold text-primaryText`}
           >
             Something Awesome is Coming Soon
           </h2>
-          <p className={`${josefinSans.className} mt-2 text-lg text-gray-600`}>
+          <p
+            className={`${josefinSans.className} mt-2 text-lg text-primaryText`}
+          >
             We’re working hard to bring you a brand new experience. Stay tuned
             for updates!
           </p>
@@ -60,7 +62,7 @@ export default function ComingSoon() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full sm:w-64 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
+            className="w-full sm:w-64 p-3 rounded-md border border-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
           />
           <input
             type="text"
@@ -72,7 +74,7 @@ export default function ComingSoon() {
           />
           <button
             type="submit"
-            className="w-full sm:w-auto px-6 py-3 bg-accentyellow text-black font-medium rounded-md hover:bg-darkaccentyellow transition-colors"
+            className="w-full sm:w-auto px-6 py-3 bg-accent text-black font-medium rounded-md hover:bg-accentHover transition-colors"
           >
             Notify Me
           </button>

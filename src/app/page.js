@@ -96,7 +96,7 @@ export default function Home() {
             {testimonials.map((t, index) => (
               <div
                 key={index}
-                className="bg-white border border-borders rounded-2xl p-8 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer flex flex-col justify-between min-h-[280px]"
+                className="bg-background border border-borders rounded-2xl p-8 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer flex flex-col justify-between min-h-[280px]"
               >
                 <p className="text-primaryText text-lg leading-relaxed mb-6 italic flex-grow">
                   “{t.quote}”
