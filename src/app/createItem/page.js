@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { storage } from "../firebase";
 import {
   ref,
@@ -8,6 +8,57 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
+import { parseCookies } from "nookies";
+
+const checkAuthStatus = async () => {
+  try {
+    console.log("Here");
+    const serverURL = process.env.NEXT_PUBLIC_REACT_APP_SERVER;
+    const cookies = parseCookies(); // Make sure you have imported parseCookies
+    const token = cookies.token;
+
+    if (!token) {
+      window.location.replace("/login");
+      return; // No token, assume not authenticated
+    }
+    console.log("COOKIES", cookies);
+    console.log("token", token);
+
+    const response = await fetch(`${serverURL}/users/self`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.log("FAIL");
+      // Could not verify token or fetch user
+      //window.location.replace("/login");
+      return;
+    }
+
+    const user = await response.json();
+    console.log(user, token);
+
+    // If user is not an Admin, redirect
+    // if (
+    //   !user.permissions ||
+    //   (!user.permissions.includes("Paid") &&
+    //     !user.permissions.includes("Admin"))
+    // ) {
+    //   window.location.replace("/login");
+    // }
+
+    return { user, token };
+  } catch (error) {
+    console.error("Error checking auth status:", error);
+    // Optionally clear token on error
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.replace("/");
+  }
+};
 
 function resizeImage(file, maxWidth, maxHeight) {
   return new Promise((resolve, reject) => {
@@ -89,6 +140,8 @@ export default function CreateItem() {
   const [imageFile, setImageFile] = useState(null);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const fileInputRef = useRef();
 
   const handleChange = (e) => {
@@ -99,15 +152,20 @@ export default function CreateItem() {
     });
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.size > 5 * 1024 * 1024) {
-      // 5MB limit
-      showMessage("File size exceeds 5MB limit.", "error");
-      return;
-    }
-    setImageFile(e.target.files[0]);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) {
+        console.log("EEEEE");
+        const result = await checkAuthStatus();
+        console.log("E", result);
+        if (result) {
+          setUser(result.user);
+          setToken(result.token);
+        }
+      }
+    };
+    fetchData();
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -159,11 +217,12 @@ export default function CreateItem() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(payload),
         }
       );
-
+      console.log("AAAA");
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.error || "Failed to create item.");

@@ -2,6 +2,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
+import { AuthProvider } from "../context/authContext";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -33,10 +34,12 @@ export default function RootLayout({ children }) {
       <body
         className={`flex min-h-screen flex-col ${montserrat.variable} ${geistMono.variable} antialiased`}
       >
-        <Nav />
-        <main className="flex-grow">{children}</main>
+        <AuthProvider>
+          <Nav />
+          <main className="flex-grow">{children}</main>
 
-        <Footer></Footer>
+          <Footer></Footer>
+        </AuthProvider>
       </body>
     </html>
   );

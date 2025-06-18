@@ -6,7 +6,7 @@ const cors = require("cors");
 const next = require("next");
 
 const itemRoutes = require("./routes/itemRoutes");
-
+const userRoutes = require("./routes/userRoutes");
 // Initialize Firebase Admin
 admin.initializeApp();
 
@@ -44,6 +44,7 @@ apiApp.post("/test", (req, res) => {
   res.status(200).json({ message: "CORS is working!", body: req.body });
 });
 apiApp.use("/items", itemRoutes);
+apiApp.use("/users", userRoutes);
 // Next.js SSR Setup
 const nextjsDistDir = "../.next"; // Path to .next directory relative to functions/
 const nextjsServer = next({

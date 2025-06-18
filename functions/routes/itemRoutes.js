@@ -1,14 +1,15 @@
-//const authenticateFirebaseToken = require("../modules/firebaseAuthMiddleware");
+const authenticateFirebaseToken = require("../modules/firebaseAuthMiddleware");
+const checkAdminPermission = require("../modules/checkadmin"); // Adjust path as needed
 
 const express = require("express");
 const router = express.Router();
 const admin = require("firebase-admin");
 
 // POST - Create item
-router.post("/", async (req, res) => {
+router.post("/", authenticateFirebaseToken, async (req, res) => {
   try {
     const { title, price, description, imgUrl, sizes, tags } = req.body;
-    const userId = "testers"; // Replace with req.user.uid when auth is added
+    const userId = req.user.uid; // Replace with req.user.uid when auth is added
 
     console.log("title", title);
     console.log("price", price);
@@ -81,7 +82,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // PUT - Update item
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAdminPermission, async (req, res) => {
   try {
     const db = admin.database();
     const itemsRef = db.ref("items");
@@ -108,7 +109,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE - Delete item
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAdminPermission, async (req, res) => {
   try {
     const { id } = req.params;
     const db = admin.database();
