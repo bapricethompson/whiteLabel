@@ -51,13 +51,13 @@ export default function Slider() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto px-4">
       <div ref={sliderRef} className="keen-slider w-full mx-auto">
         {[team, candle, team].map((imgSrc, idx) => (
           <div
             key={idx}
             className="keen-slider__slide"
-            style={{ position: "relative", height: "300px", width: "100%" }} // changed width to 100% for better responsiveness
+            style={{ position: "relative", height: "350px", width: "100%" }} // changed width to 100% for better responsiveness
           >
             <Image
               src={imgSrc}

@@ -41,41 +41,37 @@ export default function FilterBar({ onFilterChange }) {
       <FilterButton
         onClick={() => setShowDropdown(!showDropdown)}
         active={showDropdown}
-      />
-      {showDropdown && (
+      >
         <div
-          className="absolute top-full mt-2 right-0 w-[50%] md:w-[20%] bg-background border border-borders rounded shadow max-h-64 z-10 flex flex-col"
+          className="overflow-y-auto text-base max-h-[240px] px-4"
           onMouseLeave={() => setShowDropdown(false)}
         >
-          {/* Scrollable tags container */}
-          <div className="overflow-y-auto text-base max-h-[240px] px-4">
-            {tagOptions.map((tag) => (
-              <label
-                key={tag}
-                className="flex items-center py-2  cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(tag)}
-                  onChange={() => toggleTag(tag)}
-                  className="mr-2"
-                />
-                {tag}
-              </label>
-            ))}
-          </div>
+          {tagOptions.map((tag) => (
+            <label key={tag} className="flex items-center py-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={selectedTags.includes(tag)}
+                onChange={() => toggleTag(tag)}
+                className="mr-2"
+              />
+              {tag}
+            </label>
+          ))}
 
-          {/* Fixed footer with Apply button */}
-          <div className="border-t p-2 bg-background flex justify-end sticky bottom-0">
+          {/* Sticky Apply button */}
+          <div className=" p-2 bg-background flex justify-end sticky ">
             <button
-              onClick={handleApplyFilters}
-              className="px-4 py-1 bg-accent  rounded hover:bg-accentHover text-white"
+              onClick={() => {
+                handleApplyFilters();
+                setShowDropdown(false);
+              }}
+              className="px-4 py-1 bg-accent rounded hover:bg-accentHover text-white"
             >
               Apply
             </button>
           </div>
         </div>
-      )}
+      </FilterButton>
     </div>
   );
 }

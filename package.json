@@ -12,11 +12,13 @@
   "dependencies": {
     "@testing-library/user-event": "^14.6.1",
     "keen-slider": "^6.8.6",
+    "multer": "^2.0.1",
     "next": "15.1.8",
     "nookies": "^2.5.2",
     "react": "^19.0.0",
     "react-calendar": "^6.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-slick": "^0.30.3"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",

@@ -1,5 +1,5 @@
 "use client";
-
+//import { storage } from "../firebase.json";
 import { useState } from "react";
 
 export default function CreateItem() {
@@ -7,11 +7,10 @@ export default function CreateItem() {
     title: "",
     price: "",
     description: "",
-    imgUrl: "",
     sizes: false,
     tags: "",
   });
-
+  const [imageFile, setImageFile] = useState(null);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
 
@@ -23,13 +22,23 @@ export default function CreateItem() {
     });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.size > 5 * 1024 * 1024) {
+      // 5MB limit
+      showMessage("File size exceeds 5MB limit.", "error");
+      return;
+    }
+    setImageFile(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { title, price, description, imgUrl, tags } = formData;
+    const { title, price, description, tags } = formData;
 
-    if (!title || !price || !description || !imgUrl) {
-      showMessage("All fields are required.", "error");
+    if (!title || !price || !description || !imageFile) {
+      showMessage("All fields are required, including an image.", "error");
       return;
     }
 
@@ -38,36 +47,38 @@ export default function CreateItem() {
       .map((tag) => tag.trim())
       .filter((tag) => tag !== "");
 
-    const payload = {
-      ...formData,
-      price: parseFloat(formData.price),
-      tags: tagsArray,
-    };
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("price", formData.price.toString());
+    form.append("description", formData.description);
+    form.append("sizes", formData.sizes);
+    form.append("tags", JSON.stringify(tagsArray));
+    form.append("image", imageFile);
+    for (const [key, value] of form.entries()) {
+      console.log(`${key}:`, value);
+    }
 
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: form,
         }
       );
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to create item.");
-      }
+      if (!res.ok) throw new Error(data.error || "Failed to create item.");
 
       setFormData({
         title: "",
         price: "",
         description: "",
-        imgUrl: "",
         sizes: false,
         tags: "",
       });
+      setImageFile(null);
 
       showMessage("Item created successfully!", "success");
     } catch (err) {
@@ -78,7 +89,6 @@ export default function CreateItem() {
   const showMessage = (msg, type) => {
     setMessage(msg);
     setMessageType(type);
-
     if (type === "success") {
       setTimeout(() => {
         setMessage("");
@@ -99,7 +109,11 @@ export default function CreateItem() {
     <div className="w-[80%] md:w-[60%] lg:w-[40%] mx-auto p-8 bg-borders shadow-lg rounded-2xl my-12">
       <h2 className="text-3xl font-bold mb-6">Create New Item</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-5"
+        encType="multipart/form-data"
+      >
         <div>
           <label htmlFor="title" className="block text-sm font-medium mb-1">
             Title
@@ -129,14 +143,13 @@ export default function CreateItem() {
         </div>
 
         <div>
-          <label htmlFor="imgUrl" className="block text-sm font-medium mb-1">
-            Image URL
+          <label htmlFor="image" className="block text-sm font-medium mb-1">
+            Image
           </label>
           <input
-            type="text"
-            name="imgUrl"
-            value={formData.imgUrl}
-            onChange={handleChange}
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
             className={inputClass}
             required
           />

@@ -31,10 +31,11 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/shopping_basket.svg" type="image/svg+xml" />
       </head>
       <body
-        className={`${montserrat.variable} ${geistMono.variable} antialiased`}
+        className={`flex min-h-screen flex-col ${montserrat.variable} ${geistMono.variable} antialiased`}
       >
         <Nav />
-        {children}
+        <main className="flex-grow">{children}</main>
+
         <Footer></Footer>
       </body>
     </html>
