@@ -12,6 +12,12 @@ The goal was to create a simple yet robust full-stack application that covers th
 
 ---
 
+## Image Uploads with Firebase Storage
+
+Images uploaded through the app are stored securely in Firebase Storage. After a successful upload, the app saves the image’s accessible URL in the Firebase Realtime Database (or Firestore), allowing easy retrieval and display of images throughout the application without storing the actual image files in the database.
+
+---
+
 ## 🛠️ Design & Architecture Decisions
 
 - **Next.js** was chosen for its hybrid rendering (static and server-side), which enables blazing-fast performance and SEO optimization out of the box.
@@ -31,6 +37,10 @@ The goal was to create a simple yet robust full-stack application that covers th
 ### 2. **firebase**
 
 - Google's backend-as-a-service platform used in this project for authentication, database (Realtime), storage, and hosting.
+
+### 2. **nookies**
+
+- A simple and lightweight cookie utility for Next.js and React, used to easily set, parse, and destroy cookies on both client and server sides.
 
 ---
 
