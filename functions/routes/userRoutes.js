@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const admin = require("firebase-admin");
 const checkIfLoggedIn = require("../modules/checkIfLoggedIn");
+const authenticateFirebaseToken = require("../modules/firebaseAuthMiddleware");
 
 // POST /users - Register a new user and store in Realtime DB
 router.post("/", async (req, res) => {
@@ -38,7 +39,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", checkIfLoggedIn, async (req, res) => {
+router.get("/", authenticateFirebaseToken, async (req, res) => {
   const user = req.user;
 
   // Ensure only Admins can get all users
@@ -92,6 +93,7 @@ router.get("/self", checkIfLoggedIn, async (req, res) => {
     const userId = req.user.uid;
 
     if (userId === "") {
+      console.log("I AM HERE");
       res.status(400).json({ error: "Please login" });
       return;
     }

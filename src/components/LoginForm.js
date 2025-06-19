@@ -1,15 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../app/firebase"; // Adjust path if needed
 import Link from "next/link";
+import { parseCookies } from "nookies";
+
+const checkAuthStatus = async () => {
+  try {
+    const serverURL = process.env.NEXT_PUBLIC_REACT_APP_SERVER;
+    const cookies = parseCookies(); // Make sure you have imported parseCookies
+    const token = cookies.token; // Get the token from cookies
+
+    if (!token) {
+      return; // Stay on current page if no token exists
+    }
+
+    const response = await fetch(`${serverURL}/users/self`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      // If user is authenticated, redirect to home
+      window.location.replace("/");
+    } else {
+      // If response is not ok, clear the invalid token
+      document.cookie =
+        "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+  } catch (error) {
+    console.error("Error checking auth status:", error);
+    // Optionally clear token on error
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+};
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,11 +59,11 @@ export default function LoginForm() {
       const idToken = await userCred.user.getIdToken();
 
       // Optionally store it for future requests
-      localStorage.setItem("token", idToken);
+      document.cookie = `token=${idToken};`; // Adjust the cookie settings as needed
+      window.location.replace("/");
+      console.log("Token set in cookie");
 
       console.log("Logged in!", userCred.user);
-      // maybe redirect or update UI state here
-      window.location.replace("/");
     } catch (err) {
       console.error("Login error:", err);
       setError("Login failed. Check your credentials.");

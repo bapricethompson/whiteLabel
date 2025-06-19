@@ -10,6 +10,7 @@ const checkAuthStatus = async () => {
 
     if (!token) {
       window.location.replace("/login");
+      console.log("token bad");
       return; // No token, assume not authenticated
     }
 
@@ -24,6 +25,7 @@ const checkAuthStatus = async () => {
     if (!response.ok) {
       // Could not verify token or fetch user
       window.location.replace("/login");
+      console.log("response bad");
       return;
     }
 
@@ -140,7 +142,7 @@ export default function AdminPortal() {
 
   return (
     <div className="py-8">
-      <GenericH1 className="text-center">Admin Dashboard</GenericH1>
+      <GenericH1 className="text-center">Admin Dashboard!</GenericH1>
       <div className="w-full h-12 border-t-2 border-b-2 py-8 border-black flex items-center justify-around">
         <button
           onClick={() => setActiveTab("users")}
