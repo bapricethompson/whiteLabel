@@ -28,7 +28,7 @@ const checkAuthStatus = async () => {
     }
 
     const user = await response.json();
-    console.log(user);
+    console.log("MY USER", user);
 
     // If user is not an Admin, redirect
     if (!user.permissions || !user.permissions.includes("Admin")) {
@@ -47,11 +47,70 @@ import Button from "../../components/Button";
 import GenericH1 from "../../components/GenericH1";
 import { useEffect, useState } from "react";
 import { FetchItems } from "../../modules/FetchItems";
+import { FetchUsers } from "../../modules/FetchUsers";
+import { DeleteUser } from "../../modules/DeleteUser";
+import { PutUser } from "../../modules/PutUser";
 
 export default function AdminPortal() {
   const [items, setItems] = useState([]);
   const [activeTab, setActiveTab] = useState("listings");
   const [loading, setLoading] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    email: "",
+    permissions: "",
+  });
+
+  const startEdit = (user) => {
+    setEditingId(user.uid);
+    setEditForm({
+      permissions: user.permissions || "",
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditForm({ name: "", email: "", permissions: "" });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async (id) => {
+    await PutUser(id, editForm.permissions);
+    const updatedUsers = await FetchUsers();
+    setAllUsers(updatedUsers);
+    cancelEdit();
+  };
+
+  const handleDelete = async (userId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const res = await DeleteUser(userId);
+
+      if (res.ok) {
+        alert("User deleted successfully.");
+        const updatedUsers = await FetchUsers();
+        setAllUsers(updatedUsers);
+      } else {
+        const error = await res.json();
+        alert(`Failed to delete: ${error.message || "Unknown error"}`);
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      const updatedUsers = await FetchUsers();
+      setAllUsers(updatedUsers);
+      //alert("An error occurred while deleting the user.");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +121,10 @@ export default function AdminPortal() {
         if (activeTab === "listings") {
           const data = await FetchItems();
           setItems(data);
+        } else if (activeTab === "users") {
+          const getUsers = await FetchUsers();
+          console.log("hhhh", getUsers);
+          setAllUsers(getUsers);
         }
       } catch (error) {
         console.error("Error fetching events:", error);
@@ -103,19 +166,91 @@ export default function AdminPortal() {
         </button>
       </div>
       {activeTab === "users" && (
-        <div className="min-h-screen flex flex-col">
-          {/* Main Content */}
-          <main className="flex-grow text-center my-[40px] mx-auto">
-            <div className="p-6 mb-8 w-[85%] mx-auto">
-              <h2 className={` text-3xl font-semibold text-primaryText`}>
-                Something Awesome is Coming Soon
-              </h2>
-              <p className={` mt-2 text-lg text-primaryText`}>
-                We’re working hard to bring you a brand new experience. Stay
-                tuned for updates!
-              </p>
-            </div>
-          </main>
+        <div className="py-8">
+          {console.log("Users array:", allUsers)}
+          <ul className="w-[90%] max-w-3xl mx-auto space-y-4">
+            {allUsers.map((user) => (
+              <li
+                key={user.uid}
+                className="border p-4 rounded shadow-sm text-black"
+              >
+                <div className="mr-0 w-full flex justify-end space-x-2">
+                  {editingId === user.uid ? (
+                    <>
+                      <button
+                        onClick={() => handleSave(user.uid)}
+                        className="text-green-600 hover:text-green-800"
+                        title="Save"
+                      >
+                        <span className="material-icons">save</span>
+                      </button>
+                      <button
+                        onClick={cancelEdit}
+                        className="text-gray-600 hover:text-gray-900"
+                        title="Cancel"
+                      >
+                        <span className="material-icons">close</span>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => startEdit(user)}
+                        className="text-gray-600 hover:text-blue-500"
+                        title="Edit"
+                      >
+                        <span className="material-icons">edit</span>
+                      </button>
+                      <button
+                        onClick={() => handleDelete(user.uid)}
+                        className="text-gray-600 hover:text-red-500"
+                        title="Delete"
+                      >
+                        <span className="material-icons">delete</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+
+                {editingId === user.uid ? (
+                  <div className="space-y-2">
+                    <p>
+                      <strong>Name:</strong> {user.name}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {user.email}
+                    </p>
+                    <div>
+                      <label className="block text-sm">Permissions</label>
+                      <input
+                        type="text"
+                        name="permissions"
+                        value={editForm.permissions}
+                        onChange={handleChange}
+                        className="w-full border rounded px-2 py-1"
+                        placeholder="e.g., Admin, Paid"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <p>
+                      <strong>Name:</strong> {user.name}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {user.email}
+                    </p>
+                    <p>
+                      <strong>Permissions:</strong>{" "}
+                      {Array.isArray(user.permissions)
+                        ? user.permissions.join(", ")
+                        : user.permissions}
+                    </p>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
       {activeTab === "listings" && (

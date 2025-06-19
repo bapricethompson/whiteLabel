@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import LoginButton from "./LoginButton";
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -60,6 +61,9 @@ export default function Nav() {
           >
             View Cart
           </Link>
+          <Link href="/login" className="hover:underline">
+            Login
+          </Link>
         </div>
       )}
 
@@ -93,19 +97,20 @@ export default function Nav() {
             </Link>
           </div>
         </div>
-        <div className="mr-[30px]">
+        <div className="flex justify-between items-center mr-[30px]">
           <a href="/cart">
             <span
               className="material-icons"
               style={{
                 fontSize: "40px",
                 marginRight: "30px",
-                marginLeft: "15px",
+                marginLeft: "30px",
               }}
             >
               shopping_cart
             </span>
           </a>
+          <LoginButton href="/login">Login</LoginButton>
         </div>
       </div>
     </nav>

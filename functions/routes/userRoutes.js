@@ -38,7 +38,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", checkIfLoggedIn, async (req, res) => {
+  const user = req.user;
+
+  // Ensure only Admins can get all users
+  if (!user.permissions.includes("Admin")) {
+    return res
+      .status(401)
+      .json({ error: "Admin permission required to get all users." });
+  }
+
   try {
     const snapshot = await admin.database().ref("users").once("value");
     const users = snapshot.val();
@@ -145,6 +154,40 @@ router.put("/:uid", async (req, res) => {
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/changePermission", checkIfLoggedIn, async (req, res) => {
+  try {
+    const requester = req.user;
+
+    // Check if requester has Admin permissions
+    if (!requester.permissions.includes("Admin")) {
+      return res.status(403).json({
+        error: "You do not have permission to perform this action.",
+      });
+    }
+
+    const { uid, Permission } = req.body;
+    if (!uid) {
+      return res.status(400).json({ error: "Missing user UID" });
+    }
+
+    // ✅ Update Firebase Auth custom claims
+    await admin.auth().setCustomUserClaims(uid, { permissions: Permission });
+
+    // ✅ Update Realtime Database user profile
+    const db = admin.database();
+    await db.ref(`users/${uid}/permissions`).set(Permission);
+
+    return res
+      .status(200)
+      .json({ message: `User ${uid} is now an ${Permission}.` });
+  } catch (err) {
+    console.error("Error promoting user to admin:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal server error", details: err.message });
   }
 });
 
