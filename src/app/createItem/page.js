@@ -42,14 +42,10 @@ const checkAuthStatus = async () => {
     const user = await response.json();
     console.log(user, token);
 
-    // If user is not an Admin, redirect
-    // if (
-    //   !user.permissions ||
-    //   (!user.permissions.includes("Paid") &&
-    //     !user.permissions.includes("Admin"))
-    // ) {
-    //   window.location.replace("/login");
-    // }
+    //If user is not an Admin, redirect
+    if (!user.permissions || !user.permissions.includes("Admin")) {
+      window.location.replace("/home");
+    }
 
     return { user, token };
   } catch (error) {

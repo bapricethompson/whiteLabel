@@ -1,11 +1,127 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { parseCookies } from "nookies";
+import { storage } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
+
+const checkAuthStatus = async () => {
+  try {
+    console.log("Here");
+    const serverURL = process.env.NEXT_PUBLIC_REACT_APP_SERVER;
+    const cookies = parseCookies(); // Make sure you have imported parseCookies
+    const token = cookies.token;
+
+    if (!token) {
+      window.location.replace("/login");
+      return; // No token, assume not authenticated
+    }
+    console.log("COOKIES", cookies);
+    console.log("token", token);
+
+    const response = await fetch(`${serverURL}/users/self`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.log("FAIL");
+      // Could not verify token or fetch user
+      window.location.replace("/login");
+      return;
+    }
+
+    const user = await response.json();
+    console.log(user, token);
+
+    //If user is not an Admin, redirect
+    if (!user.permissions || !user.permissions.includes("Admin")) {
+      window.location.replace("/");
+    }
+
+    return { user, token };
+  } catch (error) {
+    console.error("Error checking auth status:", error);
+    // Optionally clear token on error
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.replace("/");
+  }
+};
+
+function resizeImage(file, maxWidth, maxHeight) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth || height > maxHeight) {
+          const ratio = Math.min(maxWidth / width, maxHeight / height);
+          width = width * ratio;
+          height = height * ratio;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return reject(new Error("Canvas is empty"));
+            const resizedFile = new File([blob], file.name, {
+              type: file.type,
+              lastModified: Date.now(),
+            });
+            resolve(resizedFile);
+          },
+          file.type,
+          0.9
+        );
+      };
+
+      img.onerror = reject;
+      img.src = event.target.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadFile(file, folder, name) {
+  if (!file) return null;
+
+  try {
+    const resizedFile = await resizeImage(file, 700, 500);
+
+    const fileRef = ref(storage, `${folder}/${name}-${v4()}`);
+    const metadata = { contentType: resizedFile.type };
+
+    const snapshot = await uploadBytes(fileRef, resizedFile, metadata);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    return downloadURL;
+  } catch (err) {
+    console.error("Image upload error:", err);
+    throw err;
+  }
+}
 
 export default function UpdateItem() {
   const searchParams = useSearchParams();
   const itemId = searchParams.get("itemId");
   const router = useRouter();
+
   const [formData, setFormData] = useState({
     title: "",
     price: "",
@@ -20,8 +136,28 @@ export default function UpdateItem() {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
 
+  const [imageFile, setImageFile] = useState(null);
+  const fileInputRef = useRef();
+
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
   useEffect(() => {
-    const fetchItem = async () => {
+    const verifyAuth = async () => {
+      const result = await checkAuthStatus();
+      if (!result) {
+        // Redirect happens inside checkAuthStatus if unauthorized
+        return;
+      }
+      setUser(result.user);
+      setToken(result.token);
+    };
+
+    verifyAuth();
+  }, []);
+
+  useEffect(() => {
+    async function fetchItem() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items/${itemId}`
@@ -43,7 +179,7 @@ export default function UpdateItem() {
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     if (itemId) fetchItem();
   }, [itemId]);
@@ -56,43 +192,67 @@ export default function UpdateItem() {
     });
   };
 
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { title, price, description, imgUrl } = formData;
 
-    if (!title || !price || !description || !imgUrl) {
-      showMessage("All fields are required.", "error");
+    if (!title || !price || !description) {
+      showMessage("Title, price, and description are required.", "error");
       return;
     }
+
+    setSubmitting(true);
+
+    let finalImageUrl = imgUrl;
+
+    if (imageFile) {
+      try {
+        finalImageUrl = await uploadFile(
+          imageFile,
+          "items",
+          "items-" + title.replaceAll(" ", "_")
+        );
+      } catch (err) {
+        setSubmitting(false);
+        showMessage("Image upload failed.", "error");
+        return;
+      }
+    }
+
     const payload = {
       ...formData,
+      imgUrl: finalImageUrl,
       tags: formData.tags
         .split(",")
         .map((tag) => tag.trim())
-        .filter((tag) => tag), // removes empty strings
+        .filter(Boolean),
+      price: parseFloat(price),
     };
 
     try {
-      setSubmitting(true);
-
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/items/${itemId}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(payload),
         }
       );
-
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.error || "Failed to update item.");
 
       showMessage("Item updated successfully!", "success");
-      setTimeout(() => {
-        router.push("/admin");
-      }, 1000);
+      setTimeout(() => router.push("/admin"), 1500);
     } catch (err) {
       showMessage(err.message, "error");
     } finally {
@@ -126,7 +286,11 @@ export default function UpdateItem() {
       {loading ? (
         <p className="text-center text-foreground">Loading item...</p>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+          encType="multipart/form-data"
+        >
           <div>
             <label htmlFor="title" className="block text-sm font-medium mb-1">
               Title
@@ -156,17 +320,25 @@ export default function UpdateItem() {
           </div>
 
           <div>
-            <label htmlFor="imgUrl" className="block text-sm font-medium mb-1">
-              Image URL
+            <label className="block text-sm font-medium mb-1">
+              Upload New Image
             </label>
             <input
-              type="text"
-              name="imgUrl"
-              value={formData.imgUrl}
-              onChange={handleChange}
-              className={inputClass}
-              required
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              ref={fileInputRef}
             />
+            {formData.imgUrl && !imageFile && (
+              <img
+                src={formData.imgUrl}
+                alt="Current"
+                className="mt-2 max-h-40 object-contain"
+              />
+            )}
+            {imageFile && (
+              <p className="mt-2 text-sm text-gray-700">{imageFile.name}</p>
+            )}
           </div>
 
           <div>

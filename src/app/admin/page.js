@@ -1,46 +1,46 @@
 "use client";
 import { parseCookies } from "nookies";
 
-// const checkAuthStatus = async () => {
-//   try {
-//     console.log("Here");
-//     const serverURL = process.env.NEXT_PUBLIC_REACT_APP_SERVER;
-//     const cookies = parseCookies(); // Make sure you have imported parseCookies
-//     const token = cookies.token;
+const checkAuthStatus = async () => {
+  try {
+    console.log("Here");
+    const serverURL = process.env.NEXT_PUBLIC_REACT_APP_SERVER;
+    const cookies = parseCookies(); // Make sure you have imported parseCookies
+    const token = cookies.token;
 
-//     if (!token) {
-//       window.location.replace("/login");
-//       return; // No token, assume not authenticated
-//     }
+    if (!token) {
+      window.location.replace("/login");
+      return; // No token, assume not authenticated
+    }
 
-//     const response = await fetch(`${serverURL}/users/self`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
+    const response = await fetch(`${serverURL}/users/self`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-//     if (!response.ok) {
-//       // Could not verify token or fetch user
-//       window.location.replace("/login");
-//       return;
-//     }
+    if (!response.ok) {
+      // Could not verify token or fetch user
+      window.location.replace("/login");
+      return;
+    }
 
-//     const user = await response.json();
-//     console.log(user);
+    const user = await response.json();
+    console.log(user);
 
-//     // If user is not an Admin, redirect
-//     if (!user.permissions || !user.permissions.includes("Admin")) {
-//       window.location.replace("/login");
-//     }
-//   } catch (error) {
-//     console.error("Error checking auth status:", error);
-//     // Optionally clear token on error
-//     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-//     window.location.replace("/");
-//   }
-// };
+    // If user is not an Admin, redirect
+    if (!user.permissions || !user.permissions.includes("Admin")) {
+      window.location.replace("/");
+    }
+  } catch (error) {
+    console.error("Error checking auth status:", error);
+    // Optionally clear token on error
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.replace("/");
+  }
+};
 
 import AdminCard from "../../components/AdminCard";
 import Button from "../../components/Button";
@@ -55,7 +55,7 @@ export default function AdminPortal() {
 
   useEffect(() => {
     const fetchData = async () => {
-      //await checkAuthStatus(); // Check admin status before loading events
+      await checkAuthStatus(); // Check admin status before loading events
       setLoading(true);
 
       try {
