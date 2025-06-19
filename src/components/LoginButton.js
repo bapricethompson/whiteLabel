@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { app, auth } from "../../firebase";
+import { app, auth } from "../app/firebase";
 
 export default function LoginButton({ children, type, onClick, href }) {
   const [clicked, setClicked] = useState(false);

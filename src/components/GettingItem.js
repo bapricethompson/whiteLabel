@@ -51,12 +51,14 @@ export default function GettingItem() {
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-center w-[90%] md:w-[80%] mx-auto py-8 md:py-12 gap-6 h-[80vh]">
-      <div className="relative w-full md:w-1/2 aspect-[4/3] rounded overflow-hidden">
+      <div className="relative w-full md:w-1/2 h-[400px] rounded overflow-hidden">
         <Image
           src={item.imgUrl}
           alt={item.title || "Info image"}
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           style={{ objectFit: "cover", borderRadius: "inherit" }}
+          quality={90}
         />
       </div>
 

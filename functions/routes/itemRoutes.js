@@ -7,6 +7,15 @@ const admin = require("firebase-admin");
 
 // POST - Create item
 router.post("/", authenticateFirebaseToken, async (req, res) => {
+  const user = req.user;
+
+  // Ensure only Admins can get all users
+  if (!user.permissions.includes("Admin")) {
+    return res
+      .status(401)
+      .json({ error: "Admin permission required to get all users." });
+  }
+
   try {
     const { title, price, description, imgUrl, sizes, tags } = req.body;
     const userId = req.user.uid; // Replace with req.user.uid when auth is added
@@ -82,7 +91,16 @@ router.get("/:id", async (req, res) => {
 });
 
 // PUT - Update item
-router.put("/:id", checkAdminPermission, async (req, res) => {
+router.put("/:id", authenticateFirebaseToken, async (req, res) => {
+  const user = req.user;
+
+  // Ensure only Admins can get all users
+  if (!user.permissions.includes("Admin")) {
+    return res
+      .status(401)
+      .json({ error: "Admin permission required to get all users." });
+  }
+
   try {
     const db = admin.database();
     const itemsRef = db.ref("items");
@@ -109,7 +127,16 @@ router.put("/:id", checkAdminPermission, async (req, res) => {
 });
 
 // DELETE - Delete item
-router.delete("/:id", checkAdminPermission, async (req, res) => {
+router.delete("/:id", authenticateFirebaseToken, async (req, res) => {
+  const user = req.user;
+
+  // Ensure only Admins can get all users
+  if (!user.permissions.includes("Admin")) {
+    return res
+      .status(401)
+      .json({ error: "Admin permission required to get all users." });
+  }
+
   try {
     const { id } = req.params;
     const db = admin.database();

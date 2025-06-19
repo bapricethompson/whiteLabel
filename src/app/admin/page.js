@@ -88,12 +88,14 @@ export default function AdminPortal() {
   };
 
   const handleDelete = async (userId) => {
+    console.log("HANDLE DELETE triggered for:", userId);
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this user?"
     );
     if (!confirmDelete) return;
 
     try {
+      console.log("MY TOKERN", token);
       const res = await DeleteUser(userId);
 
       if (res.ok) {
@@ -202,7 +204,10 @@ export default function AdminPortal() {
                         <span className="material-icons">edit</span>
                       </button>
                       <button
-                        onClick={() => handleDelete(user.uid)}
+                        onClick={() => {
+                          console.log("Delete icon clicked");
+                          handleDelete(user.uid);
+                        }}
                         className="text-gray-600 hover:text-red-500"
                         title="Delete"
                       >

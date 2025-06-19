@@ -6,6 +6,7 @@ const authenticateFirebaseToken = async (req, res, next) => {
     const auth = admin.auth();
 
     const headerToken = req.header("Authorization");
+    console.log("header", headerToken);
     if (!headerToken || !headerToken.startsWith("Bearer ")) {
       return res.status(401).json({ error: "Unauthorized" });
     }
