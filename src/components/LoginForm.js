@@ -79,7 +79,7 @@ export default function LoginForm() {
         onSubmit={handleLogin}
         className="flex flex-col gap-4 w-[90%] mx-auto max-w-sm"
       >
-        <div className="mb-4">
+        <div className="mb-4 ">
           <label htmlFor="email" className="block mb-1 font-semibold">
             Email
           </label>
@@ -87,13 +87,13 @@ export default function LoginForm() {
             id="email"
             type="email"
             placeholder="Email"
-            className="p-2 border rounded w-full"
+            className="p-2 border rounded w-full text-black"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 ">
           <label htmlFor="password" className="block mb-1 font-semibold">
             Password
           </label>
@@ -101,7 +101,7 @@ export default function LoginForm() {
             id="password"
             type="password"
             placeholder="Password"
-            className="p-2 border rounded w-full"
+            className="p-2 border rounded w-full text-black"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

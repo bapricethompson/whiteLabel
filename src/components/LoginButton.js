@@ -38,7 +38,7 @@ export default function LoginButton({ children, type, onClick, href }) {
     <div
       onClick={handleClick}
       className={`px-7 py-3 hidden md:block w-fit rounded-[10px] m-auto cursor-pointer border-2 border-steel ${
-        clicked ? "bg-red-500" : "bg-background hover:bg-neutral-100"
+        clicked ? "bg-red-500" : "bg-background hover:bg-borders"
       }`}
     >
       {isLoggedIn ? "Logout" : children || "Login"}

@@ -15,6 +15,7 @@ export default function Button({
 
   const variantClasses = {
     accent: "bg-accent text-white hover:bg-accentHover focus:ring-accent",
+    second: "bg-sage text-black hover:bg-darksage  focus:ring-steel",
   };
 
   const sizeClasses = {

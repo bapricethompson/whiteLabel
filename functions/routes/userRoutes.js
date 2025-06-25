@@ -69,25 +69,7 @@ router.get("/", authenticateFirebaseToken, async (req, res) => {
   }
 });
 
-// router.get("/:uid", async (req, res) => {
-//   const { uid } = req.params;
-
-//   try {
-//     const snapshot = await admin.database().ref(`users/${uid}`).once("value");
-//     const user = snapshot.val();
-
-//     if (!user) {
-//       return res.status(404).json({ error: "User not found" });
-//     }
-
-//     res.status(200).json({ uid, ...user });
-//   } catch (error) {
-//     console.error("Error fetching user:", error);
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-router.get("/self", checkIfLoggedIn, async (req, res) => {
+router.get("/self", authenticateFirebaseToken, async (req, res) => {
   try {
     console.log("/self !!!!!!!!!!!!!!!!!!!!!");
     const userId = req.user.uid;

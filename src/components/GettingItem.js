@@ -4,7 +4,7 @@ import Button from "./Button";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import GenericP from "./GenericP";
+import { setCookie, parseCookies } from "nookies";
 
 export default function GettingItem() {
   const searchParams = useSearchParams();
@@ -49,38 +49,96 @@ export default function GettingItem() {
     return null;
   }
 
-  return (
-    <div className="flex flex-col md:flex-row justify-between items-center w-[90%] md:w-[80%] mx-auto py-8 md:py-12 gap-6 h-[80vh]">
-      <div className="relative w-full md:w-1/2 h-[400px] rounded overflow-hidden">
-        <Image
-          src={item.imgUrl}
-          alt={item.title || "Info image"}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          style={{ objectFit: "cover", borderRadius: "inherit" }}
-          quality={90}
-        />
-      </div>
+  const handleAddToCart = () => {
+    console.log("ITEM", item);
+    const cookies = parseCookies();
+    let cart = [];
 
-      <div className="w-full md:w-1/2 px-4 md:px-12">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl">{item.title}</h1>
-        <h2 className="text-xl sm:text-2xl md:text-3xl mt-2">${item.price}</h2>
-        {item.sizes && <Sizes />}
-        <p className="mt-4">{item.description}</p>
-        <div className="text-center md:text-left">
-          <Button className="my-4">Add to Cart</Button>
+    // Try parsing existing cart from cookies
+    if (cookies.cart) {
+      try {
+        cart = JSON.parse(cookies.cart);
+      } catch (error) {
+        console.error("Error parsing cart cookie", error);
+      }
+    }
+
+    // Check if item is already in cart
+    const index = cart.findIndex((i) => i.id === item.itemId);
+    if (index !== -1) {
+      cart[index].quantity += 1;
+    } else {
+      cart.push({
+        id: item.itemId,
+        title: item.title,
+        price: item.price,
+        quantity: 1,
+      });
+    }
+
+    // Set the updated cart cookie (client-side only)
+    setCookie(null, "cart", JSON.stringify(cart), {
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+      path: "/",
+    });
+
+    alert("Added to cart!");
+  };
+
+  return (
+    <div>
+      <Button
+        href="/shop"
+        className="flex justify-between items-center w-fit mt-8 ml-8"
+        variant="second"
+      >
+        <span
+          className="material-icons"
+          style={{
+            fontSize: "25px",
+            marginRight: "5px",
+          }}
+        >
+          arrow_back_ios
+        </span>{" "}
+        Back
+      </Button>
+      <div className="flex flex-col md:flex-row justify-between items-center w-[90%] md:w-[80%] mx-auto py-8  gap-6 h-[80vh]">
+        <div className="relative w-full md:w-1/2 h-[400px] rounded overflow-hidden">
+          <Image
+            src={item.imgUrl}
+            alt={item.title || "Info image"}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            style={{ objectFit: "cover", borderRadius: "inherit" }}
+            quality={90}
+          />
         </div>
-        <hr className="bg-steel h-[2px]"></hr>
-        <div className="flex flex-wrap gap-2 mt-2">
-          <span className="font-semibold">Tags:</span>
-          {item.tags?.map((tag, index) => (
-            <span
-              key={index}
-              className="px-4 py-1 text-sm bg-sage text-black rounded-sm"
-            >
-              {tag}
-            </span>
-          ))}
+
+        <div className="w-full md:w-1/2 px-4 md:px-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl">{item.title}</h1>
+          <h2 className="text-xl sm:text-2xl md:text-3xl mt-2">
+            ${item.price}
+          </h2>
+          {item.sizes && <Sizes />}
+          <p className="mt-4">{item.description}</p>
+          <div className="text-center md:text-left">
+            <Button className="my-4" onClick={handleAddToCart}>
+              Add to Cart
+            </Button>
+          </div>
+          <hr className="bg-steel h-[2px]"></hr>
+          <div className="flex flex-wrap gap-2 mt-2">
+            <span className="font-semibold">Tags:</span>
+            {item.tags?.map((tag, index) => (
+              <span
+                key={index}
+                className="px-4 py-1 text-sm bg-sage text-black rounded-sm"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
