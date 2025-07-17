@@ -3,6 +3,7 @@ const router = express.Router();
 const admin = require("firebase-admin");
 const checkIfLoggedIn = require("../modules/checkIfLoggedIn");
 const authenticateFirebaseToken = require("../modules/firebaseAuthMiddleware");
+const checkAdminPermission = require("../modules/checkadmin");
 
 // POST /users - Register a new user and store in Realtime DB
 router.post("/", async (req, res) => {
@@ -39,35 +40,32 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", authenticateFirebaseToken, async (req, res) => {
-  const user = req.user;
+router.get(
+  "/",
+  authenticateFirebaseToken,
+  checkAdminPermission,
+  async (req, res) => {
+    const user = req.user;
+    try {
+      const snapshot = await admin.database().ref("users").once("value");
+      const users = snapshot.val();
 
-  // Ensure only Admins can get all users
-  if (!user.permissions.includes("Admin")) {
-    return res
-      .status(401)
-      .json({ error: "Admin permission required to get all users." });
-  }
+      if (!users) {
+        return res.status(200).json([]);
+      }
 
-  try {
-    const snapshot = await admin.database().ref("users").once("value");
-    const users = snapshot.val();
+      const usersArray = Object.keys(users).map((uid) => ({
+        uid,
+        ...users[uid],
+      }));
 
-    if (!users) {
-      return res.status(200).json([]);
+      res.status(200).json(usersArray);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ error: "Failed to fetch users" });
     }
-
-    const usersArray = Object.keys(users).map((uid) => ({
-      uid,
-      ...users[uid],
-    }));
-
-    res.status(200).json(usersArray);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ error: "Failed to fetch users" });
   }
-});
+);
 
 router.get("/self", authenticateFirebaseToken, async (req, res) => {
   try {
@@ -141,38 +139,36 @@ router.put("/:uid", async (req, res) => {
   }
 });
 
-router.post("/changePermission", checkIfLoggedIn, async (req, res) => {
-  try {
-    const requester = req.user;
+router.post(
+  "/changePermission",
+  checkIfLoggedIn,
+  checkAdminPermission,
+  async (req, res) => {
+    try {
+      const requester = req.user;
 
-    // Check if requester has Admin permissions
-    if (!requester.permissions.includes("Admin")) {
-      return res.status(403).json({
-        error: "You do not have permission to perform this action.",
-      });
+      const { uid, Permission } = req.body;
+      if (!uid) {
+        return res.status(400).json({ error: "Missing user UID" });
+      }
+
+      // ✅ Update Firebase Auth custom claims
+      await admin.auth().setCustomUserClaims(uid, { permissions: Permission });
+
+      // ✅ Update Realtime Database user profile
+      const db = admin.database();
+      await db.ref(`users/${uid}/permissions`).set(Permission);
+
+      return res
+        .status(200)
+        .json({ message: `User ${uid} is now an ${Permission}.` });
+    } catch (err) {
+      console.error("Error promoting user to admin:", err);
+      return res
+        .status(500)
+        .json({ error: "Internal server error", details: err.message });
     }
-
-    const { uid, Permission } = req.body;
-    if (!uid) {
-      return res.status(400).json({ error: "Missing user UID" });
-    }
-
-    // ✅ Update Firebase Auth custom claims
-    await admin.auth().setCustomUserClaims(uid, { permissions: Permission });
-
-    // ✅ Update Realtime Database user profile
-    const db = admin.database();
-    await db.ref(`users/${uid}/permissions`).set(Permission);
-
-    return res
-      .status(200)
-      .json({ message: `User ${uid} is now an ${Permission}.` });
-  } catch (err) {
-    console.error("Error promoting user to admin:", err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", details: err.message });
   }
-});
+);
 
 module.exports = router;
