@@ -5,52 +5,7 @@ import { parseCookies } from "nookies";
 import { storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
-
-const checkAuthStatus = async () => {
-  try {
-    console.log("Here");
-    const serverURL = process.env.NEXT_PUBLIC_REACT_APP_SERVER;
-    const cookies = parseCookies(); // Make sure you have imported parseCookies
-    const token = cookies.token;
-
-    if (!token) {
-      window.location.replace("/login");
-      return; // No token, assume not authenticated
-    }
-    console.log("COOKIES", cookies);
-    console.log("token", token);
-
-    const response = await fetch(`${serverURL}/users/self`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      console.log("FAIL");
-      // Could not verify token or fetch user
-      window.location.replace("/login");
-      return;
-    }
-
-    const user = await response.json();
-    console.log(user, token);
-
-    //If user is not an Admin, redirect
-    if (!user.permissions || !user.permissions.includes("Admin")) {
-      window.location.replace("/");
-    }
-
-    return { user, token };
-  } catch (error) {
-    console.error("Error checking auth status:", error);
-    // Optionally clear token on error
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.replace("/");
-  }
-};
+import checkAuthStatus from "../../modules/CheckAuthStatus";
 
 function resizeImage(file, maxWidth, maxHeight) {
   return new Promise((resolve, reject) => {
