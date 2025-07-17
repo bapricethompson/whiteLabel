@@ -63,10 +63,10 @@ export default function Cart() {
           >
             {/* Left: Item Info */}
             <div className="flex flex-col space-y-2">
-              <h2 className="text-xl font-semibold text-gray-800">
+              <h2 className="text-xl font-semibold text-primaryText">
                 {item.title}
               </h2>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <div className="flex items-center space-x-2 text-sm text-primaryText">
                 <button
                   className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold"
                   onClick={() => updateQuantity(item.id, -1)}
@@ -85,7 +85,7 @@ export default function Cart() {
 
             {/* Right: Price and Remove */}
             <div className="flex flex-col items-end justify-between h-full">
-              <div className="text-lg font-semibold text-gray-800">
+              <div className="text-lg font-semibold text-primaryText">
                 ${(item.price * item.quantity).toFixed(2)}
               </div>
               <button
@@ -101,7 +101,7 @@ export default function Cart() {
 
       <hr className="my-10 border-gray-300" />
 
-      <div className="text-right text-2xl font-bold text-gray-900">
+      <div className="text-right text-2xl font-bold text-primaryText">
         Total: $
         {cartItems
           .reduce((sum, item) => sum + item.price * item.quantity, 0)
