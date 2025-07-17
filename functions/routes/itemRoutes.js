@@ -6,56 +6,54 @@ const router = express.Router();
 const admin = require("firebase-admin");
 
 // POST - Create item
-router.post("/", authenticateFirebaseToken, async (req, res) => {
-  const user = req.user;
+router.post(
+  "/",
+  authenticateFirebaseToken,
+  checkAdminPermission,
+  async (req, res) => {
+    const user = req.user;
 
-  // Ensure only Admins can get all users
-  if (!user.permissions.includes("Admin")) {
-    return res
-      .status(401)
-      .json({ error: "Admin permission required to get all users." });
-  }
+    try {
+      const { title, price, description, imgUrl, sizes, tags } = req.body;
+      const userId = req.user.uid; // Replace with req.user.uid when auth is added
 
-  try {
-    const { title, price, description, imgUrl, sizes, tags } = req.body;
-    const userId = req.user.uid; // Replace with req.user.uid when auth is added
+      console.log("title", title);
+      console.log("price", price);
+      console.log("img", imgUrl);
+      console.log("desc", description);
+      if (!title || !price || !description || !imgUrl) {
+        return res.status(400).json({ error: "All fields are required." });
+      }
 
-    console.log("title", title);
-    console.log("price", price);
-    console.log("img", imgUrl);
-    console.log("desc", description);
-    if (!title || !price || !description || !imgUrl) {
-      return res.status(400).json({ error: "All fields are required." });
+      if (tags && !Array.isArray(tags)) {
+        return res.status(400).json({ error: "Tags must be an array." });
+      }
+      const db = admin.database();
+      const itemsRef = db.ref("items");
+      const itemRef = itemsRef.push(); // generates a unique key
+      const itemId = itemRef.key;
+
+      const newItem = {
+        itemId,
+        title,
+        price,
+        description,
+        sizes: !!sizes, // convert sizes to boolean: true if truthy, else false
+        imgUrl,
+        tags: tags || [],
+        createdBy: userId,
+        createdAt: new Date().toISOString(),
+      };
+
+      await itemRef.set(newItem);
+
+      res.status(201).json({ message: "Item created", item: newItem });
+    } catch (error) {
+      console.error("Error creating item:", error);
+      res.status(500).json({ error: error.message });
     }
-
-    if (tags && !Array.isArray(tags)) {
-      return res.status(400).json({ error: "Tags must be an array." });
-    }
-    const db = admin.database();
-    const itemsRef = db.ref("items");
-    const itemRef = itemsRef.push(); // generates a unique key
-    const itemId = itemRef.key;
-
-    const newItem = {
-      itemId,
-      title,
-      price,
-      description,
-      sizes: !!sizes, // convert sizes to boolean: true if truthy, else false
-      imgUrl,
-      tags: tags || [],
-      createdBy: userId,
-      createdAt: new Date().toISOString(),
-    };
-
-    await itemRef.set(newItem);
-
-    res.status(201).json({ message: "Item created", item: newItem });
-  } catch (error) {
-    console.error("Error creating item:", error);
-    res.status(500).json({ error: error.message });
   }
-});
+);
 
 // GET - Read all items
 router.get("/", async (req, res) => {
@@ -91,70 +89,66 @@ router.get("/:id", async (req, res) => {
 });
 
 // PUT - Update item
-router.put("/:id", authenticateFirebaseToken, async (req, res) => {
-  const user = req.user;
+router.put(
+  "/:id",
+  authenticateFirebaseToken,
+  checkAdminPermission,
+  async (req, res) => {
+    const user = req.user;
 
-  // Ensure only Admins can get all users
-  if (!user.permissions.includes("Admin")) {
-    return res
-      .status(401)
-      .json({ error: "Admin permission required to get all users." });
-  }
+    try {
+      const db = admin.database();
+      const itemsRef = db.ref("items");
+      const { id } = req.params;
+      const updates = req.body;
 
-  try {
-    const db = admin.database();
-    const itemsRef = db.ref("items");
-    const { id } = req.params;
-    const updates = req.body;
+      if (updates.tags && !Array.isArray(updates.tags)) {
+        return res.status(400).json({ error: "Tags must be an array." });
+      }
 
-    if (updates.tags && !Array.isArray(updates.tags)) {
-      return res.status(400).json({ error: "Tags must be an array." });
+      const itemRef = itemsRef.child(id);
+      const snapshot = await itemRef.once("value");
+
+      if (!snapshot.exists()) {
+        return res.status(404).json({ error: "Item not found" });
+      }
+
+      await itemRef.update(updates);
+      res.status(200).json({ message: "Item updated" });
+    } catch (error) {
+      console.error("Error updating item:", error);
+      res.status(500).json({ error: error.message });
     }
-
-    const itemRef = itemsRef.child(id);
-    const snapshot = await itemRef.once("value");
-
-    if (!snapshot.exists()) {
-      return res.status(404).json({ error: "Item not found" });
-    }
-
-    await itemRef.update(updates);
-    res.status(200).json({ message: "Item updated" });
-  } catch (error) {
-    console.error("Error updating item:", error);
-    res.status(500).json({ error: error.message });
   }
-});
+);
 
 // DELETE - Delete item
-router.delete("/:id", authenticateFirebaseToken, async (req, res) => {
-  const user = req.user;
+router.delete(
+  "/:id",
+  authenticateFirebaseToken,
+  checkAdminPermission,
+  async (req, res) => {
+    const user = req.user;
 
-  // Ensure only Admins can get all users
-  if (!user.permissions.includes("Admin")) {
-    return res
-      .status(401)
-      .json({ error: "Admin permission required to get all users." });
-  }
+    try {
+      const { id } = req.params;
+      const db = admin.database();
+      const itemsRef = db.ref("items");
 
-  try {
-    const { id } = req.params;
-    const db = admin.database();
-    const itemsRef = db.ref("items");
+      const itemRef = itemsRef.child(id);
+      const snapshot = await itemRef.once("value");
 
-    const itemRef = itemsRef.child(id);
-    const snapshot = await itemRef.once("value");
+      if (!snapshot.exists()) {
+        return res.status(404).json({ error: "Item not found" });
+      }
 
-    if (!snapshot.exists()) {
-      return res.status(404).json({ error: "Item not found" });
+      await itemRef.remove();
+      res.status(200).json({ message: "Item deleted" });
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      res.status(500).json({ error: error.message });
     }
-
-    await itemRef.remove();
-    res.status(200).json({ message: "Item deleted" });
-  } catch (error) {
-    console.error("Error deleting item:", error);
-    res.status(500).json({ error: error.message });
   }
-});
+);
 
 module.exports = router;

@@ -1,34 +1,12 @@
-const admin = require("firebase-admin");
-
-async function checkAdminPermission(req, res, next) {
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ")
-    ? authHeader.split(" ")[1]
-    : null;
-
-  if (!token) {
-    return res.status(401).json({ error: "Unauthorized: No token provided" });
+function checkAdminPermission(req, res, next) {
+  console.log("NEW ADMIN");
+  const user = req.user;
+  if (!user || !user.permissions || !user.permissions.includes("Admin")) {
+    return res
+      .status(401)
+      .json({ error: "Admin permission required to access this route." });
   }
-
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
-
-    if (
-      decodedToken.permissions &&
-      Array.isArray(decodedToken.permissions) &&
-      decodedToken.permissions.includes("Admin")
-    ) {
-      req.user = decodedToken;
-      next();
-    } else {
-      return res
-        .status(403)
-        .json({ error: "Forbidden: Admin permission required" });
-    }
-  } catch (error) {
-    console.error("Error verifying token:", error);
-    return res.status(401).json({ error: "Unauthorized: Invalid token" });
-  }
+  next();
 }
 
 module.exports = checkAdminPermission;
