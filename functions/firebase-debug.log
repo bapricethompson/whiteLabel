@@ -434,3 +434,190 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 [debug] [2025-07-17T18:59:18.636Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-api"},"extension":{},"message":"Finishing up request with event=finish"}}
 [debug] [2025-07-17T18:59:18.636Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-api"},"extension":{},"message":"Finishing up request with event=close"}}
 [debug] [2025-07-17T18:59:18.636Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-07-17T19:12:28.275Z] File /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js changed, reloading triggers"}}
+[debug] [2025-07-17T19:12:29.277Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2025-07-17T19:12:29.673Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2025-07-17T19:12:29.673Z] Building nodejs source
+[debug] [2025-07-17T19:12:29.673Z] Failed to find version of module node: reached end of search path /home/bpt/topedgedev/whitelabel/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2025-07-17T19:12:29.674Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-07-17T19:12:29.675Z] Found firebase-functions binary at '/home/bpt/topedgedev/whitelabel/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8395
+
+[error] Error: Cannot find module '../services/authService'
+Require stack:
+- /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js
+- /home/bpt/topedgedev/whitelabel/functions/routes/itemRoutes.js
+- /home/bpt/topedgedev/whitelabel/functions/index.js
+- /home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/runtime/loader.js
+- /home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/bin/firebase-functions.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at /home/bpt/topedgedev/whitelabel/node_modules/next/dist/server/require-hook.js:55:36
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at mod.require (/home/bpt/topedgedev/whitelabel/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (/home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js:1:21)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js',
+    '/home/bpt/topedgedev/whitelabel/functions/routes/itemRoutes.js',
+    '/home/bpt/topedgedev/whitelabel/functions/index.js',
+    '/home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/runtime/loader.js',
+    '/home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/bin/firebase-functions.js'
+  ]
+}
+
+[debug] [2025-07-17T19:12:29.941Z] Got response code 400; body Failed to generate manifest from function source: Error: Cannot find module '../services/authService'
+Require stack:
+- /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js
+- /home/bpt/topedgedev/whitelabel/functions/routes/itemRoutes.js
+- /home/bpt/topedgedev/whitelabel/functions/index.js
+- /home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/runtime/loader.js
+- /home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/bin/firebase-functions.js
+[error] ⬢  functions: Failed to load function definition from source: FirebaseError: Functions codebase could not be analyzed successfully. It may have a syntax or runtime error {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: Functions codebase could not be analyzed successfully. It may have a syntax or runtime error"}}
+[debug] [2025-07-17T19:12:41.868Z] File /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js changed, reloading triggers"}}
+[debug] [2025-07-17T19:12:42.870Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2025-07-17T19:12:43.245Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2025-07-17T19:12:43.245Z] Building nodejs source
+[debug] [2025-07-17T19:12:43.245Z] Failed to find version of module node: reached end of search path /home/bpt/topedgedev/whitelabel/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2025-07-17T19:12:43.246Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-07-17T19:12:43.246Z] Found firebase-functions binary at '/home/bpt/topedgedev/whitelabel/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8510
+
+[error] Error: Cannot find module '../src/services/authService'
+Require stack:
+- /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js
+- /home/bpt/topedgedev/whitelabel/functions/routes/itemRoutes.js
+- /home/bpt/topedgedev/whitelabel/functions/index.js
+- /home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/runtime/loader.js
+- /home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/bin/firebase-functions.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1144:15)
+    at /home/bpt/topedgedev/whitelabel/node_modules/next/dist/server/require-hook.js:55:36
+    at Module._load (node:internal/modules/cjs/loader:985:27)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at mod.require (/home/bpt/topedgedev/whitelabel/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (/home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js:1:21)
+    at Module._compile (node:internal/modules/cjs/loader:1376:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js',
+    '/home/bpt/topedgedev/whitelabel/functions/routes/itemRoutes.js',
+    '/home/bpt/topedgedev/whitelabel/functions/index.js',
+    '/home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/runtime/loader.js',
+    '/home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/bin/firebase-functions.js'
+  ]
+}
+
+[debug] [2025-07-17T19:12:43.366Z] Got response code 400; body Failed to generate manifest from function source: Error: Cannot find module '../src/services/authService'
+Require stack:
+- /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js
+- /home/bpt/topedgedev/whitelabel/functions/routes/itemRoutes.js
+- /home/bpt/topedgedev/whitelabel/functions/index.js
+- /home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/runtime/loader.js
+- /home/bpt/topedgedev/whitelabel/functions/node_modules/firebase-functions/lib/bin/firebase-functions.js
+[error] ⬢  functions: Failed to load function definition from source: FirebaseError: Functions codebase could not be analyzed successfully. It may have a syntax or runtime error {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: Functions codebase could not be analyzed successfully. It may have a syntax or runtime error"}}
+[debug] [2025-07-17T19:16:50.016Z] File /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js changed, reloading triggers"}}
+[debug] [2025-07-17T19:16:51.019Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2025-07-17T19:16:51.405Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2025-07-17T19:16:51.406Z] Building nodejs source
+[debug] [2025-07-17T19:16:51.406Z] Failed to find version of module node: reached end of search path /home/bpt/topedgedev/whitelabel/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2025-07-17T19:16:51.407Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-07-17T19:16:51.407Z] Found firebase-functions binary at '/home/bpt/topedgedev/whitelabel/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8737
+
+[error] /home/bpt/topedgedev/whitelabel/src/services/authService.js:1
+export function isAdmin(user) {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at internalCompileFunction (node:internal/vm:77:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1288:20)
+    at Module._compile (node:internal/modules/cjs/loader:1340:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1435:10)
+    at Module.load (node:internal/modules/cjs/loader:1207:32)
+    at Module._load (node:internal/modules/cjs/loader:1023:12)
+    at Module.require (node:internal/modules/cjs/loader:1235:19)
+    at mod.require (/home/bpt/topedgedev/whitelabel/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:176:18)
+    at Object.<anonymous> (/home/bpt/topedgedev/whitelabel/functions/modules/checkadmin.js:1:21)
+
+[debug] [2025-07-17T19:16:51.537Z] Got response code 400; body Failed to generate manifest from function source: SyntaxError: Unexpected token 'export'
+[error] ⬢  functions: Failed to load function definition from source: FirebaseError: Functions codebase could not be analyzed successfully. It may have a syntax or runtime error {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: Functions codebase could not be analyzed successfully. It may have a syntax or runtime error"}}
